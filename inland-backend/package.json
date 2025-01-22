@@ -4,7 +4,9 @@
   "description": "Backend for the note taking app Inland",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "nodemon index.ts",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "tsc": "tsc"
   },
   "repository": {
     "type": "git",
@@ -15,5 +17,10 @@
   "bugs": {
     "url": "https://github.com/ali-eser/inland/issues"
   },
-  "homepage": "https://github.com/ali-eser/inland#readme"
+  "homepage": "https://github.com/ali-eser/inland#readme",
+  "devDependencies": {
+    "nodemon": "^3.1.9",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.3"
+  }
 }
