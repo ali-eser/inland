@@ -1,0 +1,19 @@
+{
+  "name": "inland-backend",
+  "version": "1.0.0",
+  "description": "Backend for the note taking app Inland",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ali-eser/inland.git"
+  },
+  "author": "Ali Eser",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ali-eser/inland/issues"
+  },
+  "homepage": "https://github.com/ali-eser/inland#readme"
+}
