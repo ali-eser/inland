@@ -1,4 +1,5 @@
-import { Model, DataType, Table, Column } from "sequelize-typescript";
+import { BelongsTo, ForeignKey, Model, DataType, Table, Column } from "sequelize-typescript";
+import User from "./user";
 
 @Table({
   tableName: "notes",
@@ -24,6 +25,14 @@ class Note extends Model {
     unique: false
   })
   title!: string;
+
+  @ForeignKey(() => User)
+
+  @Column(DataType.INTEGER)
+  userId!: number;
+
+  @BelongsTo(() => User, { onDelete: 'CASCADE' })
+  user!: User;
 }
 
 export default Note;
