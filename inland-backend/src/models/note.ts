@@ -10,7 +10,7 @@ class Note extends Model {
   @Column({
     primaryKey: true,
     type: DataType.INTEGER,
-    autoIncrement: true,
+    autoIncrement: true
   })
   id!: number;
 
