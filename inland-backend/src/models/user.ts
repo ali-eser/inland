@@ -1,4 +1,5 @@
-import { Model, DataType, Table, Column } from "sequelize-typescript";
+import { Model, HasMany, DataType, Table, Column } from "sequelize-typescript";
+import Note from "./note";
 
 @Table({
   tableName: "users",
@@ -31,6 +32,9 @@ class User extends Model {
     allowNull: false
   })
   passwordHash!: string;
+
+  @HasMany(() => Note) // Add the hasMany association
+  notes!: Note[];
 }
 
 export default User;
