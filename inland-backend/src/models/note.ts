@@ -9,21 +9,21 @@ class Note extends Model {
   @Column({
     primaryKey: true,
     type: DataType.INTEGER,
-    autoIncrement: true
+    autoIncrement: true,
   })
-  id!: number
+  id!: number;
 
   @Column({
     type: DataType.STRING,
     unique: false
   })
-  content!: string
+  content!: string;
 
   @Column({
     type: DataType.STRING,
     unique: false
   })
-  title!: string
+  title!: string;
 }
 
 export default Note;
