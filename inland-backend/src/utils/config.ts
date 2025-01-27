@@ -9,3 +9,4 @@ export const DATABASE_USER = process.env.DB_USER;
 export const DATABASE_PORT = process.env.DB_PORT;
 
 export const PORT = process.env.PORT;
+export const SECRET = process.env.SECRET;
