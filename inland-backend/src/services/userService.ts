@@ -7,30 +7,40 @@ const fetchUser = async (id? :number) => {
       return await User.findByPk(id);
     }
     return await User.findAll({});
-  } catch (e) {
-    console.error(e);
-    return null;
+  } catch (error) {
+    console.error(error);
+    throw error;
   }
 };
 
 const addUser = async (username: string, email: string, name: string, password: string) => {
-  const saltRounds = await bcrypt.genSalt(10);
-  const passwordHash = await bcrypt.hash(password, saltRounds);
+  try {
+    const saltRounds = await bcrypt.genSalt(10);
+    const passwordHash = await bcrypt.hash(password, saltRounds);
 
-  return await User.create({
-    username,
-    email,
-    name,
-    passwordHash
-  });
+    return await User.create({
+      username,
+      email,
+      name,
+      passwordHash
+    });
+  } catch (error: any) {
+    console.error("Error creating user: ", error);
+
+    if (error.name === "SequelizeUniqueConstraintError") {
+      throw new Error("A user with provided username or email already exists");
+    }
+
+    throw error;
+  }
 };
 
 const removeUser = async (id :number) => {
   try {
     return await User.destroy({ where: { id } });
-  } catch (e) {
-    console.error(e);
-    return e;
+  } catch (error) {
+    console.error(error);
+    throw error;
   }
 };
 
