@@ -13,7 +13,7 @@ const fetchUser = async (id? :number) => {
   }
 };
 
-const addUser = async (username: string, email: string, name: string, password: string) => {
+const addUser = async (username: string, email: string, password: string) => {
   try {
     const saltRounds = await bcrypt.genSalt(10);
     const passwordHash = await bcrypt.hash(password, saltRounds);
@@ -21,7 +21,6 @@ const addUser = async (username: string, email: string, name: string, password: 
     return await User.create({
       username,
       email,
-      name,
       passwordHash
     });
   } catch (error: any) {
