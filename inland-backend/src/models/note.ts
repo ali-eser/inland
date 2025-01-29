@@ -22,7 +22,8 @@ class Note extends Model {
 
   @Column({
     type: DataType.STRING,
-    unique: false
+    unique: false,
+    allowNull: true
   })
   title!: string;
 
