@@ -7,7 +7,7 @@ userRouter.get("/:id", async (req, res) => {
   try {
     const id = parseInt(req.params.id);
     if (isNaN(id)) {
-      res.status(400).json({ error: "Invalid user ID" });
+      res.status(400).json({ error: "Invalid user ID. ID must be an integer." });
     }
 
     const user = userService.fetchUser(id);

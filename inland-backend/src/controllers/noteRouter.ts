@@ -44,6 +44,9 @@ noteRouter.post("/", async (req, res) => {
       res.status(400).json({ error: "A user ID must be specified" });
     }
     const userId: number = parseInt(req.body.userId);
+    if (isNaN(userId)) {
+      res.status(400).json({ error: "Invalid user ID. ID must be an integer." });
+    }
 
     if (req.body.title) {
       const { title, content } = req.body;
@@ -62,6 +65,10 @@ noteRouter.post("/", async (req, res) => {
 noteRouter.put("/:id", async (req, res) => {
   try {
     const id: number = parseInt(req.params.id);
+    if (isNaN(id)) {
+      res.status(400).json({ error: "Invalid note ID. ID must be an integer." });
+    }
+
     const content: string = req.body.content;
     const updatedNote = await noteService.updateNote(id, content);
     res.status(204).json({ updatedNote });
@@ -77,6 +84,10 @@ noteRouter.put("/:id", async (req, res) => {
 noteRouter.delete("/:id", async (req, res) => {
   try {
     const id: number = parseInt(req.params.id);
+    if (isNaN(id)) {
+      res.status(400).json({ error: "Invalid note ID. ID must be an integer." });
+    }
+
     await noteService.deleteNote(id);
     res.status(204).json({ message: `The note with ID ${id} deleted successfully` });
   } catch (error: any) {
