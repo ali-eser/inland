@@ -1,19 +1,6 @@
 import Note from "../models/note";
 import User from "../models/user";
 
-const fetchSingleNote = async (id: number ) => {
-  try {
-    const note: Note | null = await Note.findByPk(id);
-    if (!note) {
-      throw new Error(`Note with the specified ID ${id} does not exist`);
-    }
-    return note;
-  } catch (error) {
-    console.error("Error: ", error);
-    throw error;
-  }
-};
-
 const fetchNotesByUser = async (userId: number) => {
   try {
     const user: User | null = await User.findByPk(userId);
@@ -22,6 +9,19 @@ const fetchNotesByUser = async (userId: number) => {
     } else {
       throw new Error("User doesn't exist");
     }
+  } catch (error) {
+    console.error("Error: ", error);
+    throw error;
+  }
+};
+
+const fetchSingleNote = async (id: number ) => {
+  try {
+    const note: Note | null = await Note.findByPk(id);
+    if (!note) {
+      throw new Error(`Note with the specified ID ${id} does not exist`);
+    }
+    return note;
   } catch (error) {
     console.error("Error: ", error);
     throw error;
