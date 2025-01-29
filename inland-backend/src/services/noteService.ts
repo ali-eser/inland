@@ -3,7 +3,10 @@ import User from "../models/user";
 
 const fetchSingleNote = async (id: number ) => {
   try {
-    const note = await Note.findByPk(id);
+    const note: Note | null = await Note.findByPk(id);
+    if (!note) {
+      throw new Error(`Note with the specified ID ${id} does not exist`);
+    }
     return note;
   } catch (error) {
     console.error("Error: ", error);
@@ -11,9 +14,9 @@ const fetchSingleNote = async (id: number ) => {
   }
 };
 
-const fetchNotesByUser= async (userId: number) => {
+const fetchNotesByUser = async (userId: number) => {
   try {
-    const user = await User.findByPk(userId);
+    const user: User | null = await User.findByPk(userId);
     if (user) {
       return user.notes;
     } else {
@@ -24,3 +27,68 @@ const fetchNotesByUser= async (userId: number) => {
     throw error;
   }
 };
+
+const createNote = async (userId: number, content: string, title?: string) => {
+  try {
+    if (userId || content == null) {
+      throw new Error("A note should have a user and content");
+    }
+    if (title) {
+      const newNote =  {
+        userId: userId,
+        content: content,
+        title: title
+      }
+      return await Note.create({ newNote });
+    } else {
+      const newNote =  {
+        userId: userId,
+        content: content
+      }
+      return await Note.create({ newNote });
+    }
+  } catch (error) {
+    console.log("Error: ", error);
+    throw error;
+  }
+};
+
+const updateNote = async (userId: number, noteId: number, content: string) => {
+  try {
+    const user: User | null = await User.findByPk(userId);
+    if (!user) {
+      throw new Error(`The user with the specified ID ${userId} does not exist`);
+    }
+
+    const note: Note | undefined = user.notes.find(n => n.id === noteId);
+    if (note === undefined) {
+      throw new Error(`Note with ID ${noteId} of user ${user.username} does not exist`);
+    }
+
+    return await note.update({ content: content });
+  } catch (error) {
+    console.error("Error: ", error);
+    throw error;
+  }
+};
+
+const deleteNote = async (userId: number, noteId: number) => {
+  try {
+    const user: User | null = await User.findByPk(userId);
+    if (!user) {
+      throw new Error(`The user with the specified ID ${userId} does not exist`);
+    }
+
+    const note: Note | undefined = user.notes.find(n => n.id === noteId);
+    if (note === undefined) {
+      throw new Error(`Note with ID ${noteId} of user ${user.username} does not exist`);
+    }
+
+    return await note.destroy();
+  } catch (error) {
+    console.error("Error: ", error);
+    throw error;
+  }
+};
+
+export default { fetchSingleNote, fetchNotesByUser, createNote, updateNote, deleteNote };
