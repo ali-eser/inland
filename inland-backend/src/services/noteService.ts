@@ -53,16 +53,11 @@ const createNote = async (userId: number, content: string, title?: string) => {
   }
 };
 
-const updateNote = async (userId: number, noteId: number, content: string) => {
+const updateNote = async (noteId: number, content: string) => {
   try {
-    const user: User | null = await User.findByPk(userId);
-    if (!user) {
-      throw new Error(`The user with the specified ID ${userId} does not exist`);
-    }
-
-    const note: Note | undefined = user.notes.find(n => n.id === noteId);
-    if (note === undefined) {
-      throw new Error(`Note with ID ${noteId} of user ${user.username} does not exist`);
+    const note: Note | null = await Note.findByPk(noteId);
+    if (!note) {
+      throw new Error(`The note with the specified ID ${noteId} does not exist`);
     }
 
     return await note.update({ content: content });
@@ -72,16 +67,11 @@ const updateNote = async (userId: number, noteId: number, content: string) => {
   }
 };
 
-const deleteNote = async (userId: number, noteId: number) => {
+const deleteNote = async (noteId: number) => {
   try {
-    const user: User | null = await User.findByPk(userId);
-    if (!user) {
-      throw new Error(`The user with the specified ID ${userId} does not exist`);
-    }
-
-    const note: Note | undefined = user.notes.find(n => n.id === noteId);
-    if (note === undefined) {
-      throw new Error(`Note with ID ${noteId} of user ${user.username} does not exist`);
+    const note: Note | null = await Note.findByPk(noteId);
+    if (!note) {
+      throw new Error(`The user with the specified ID ${noteId} does not exist`);
     }
 
     return await note.destroy();
