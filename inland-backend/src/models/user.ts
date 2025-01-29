@@ -33,7 +33,7 @@ class User extends Model {
   })
   passwordHash!: string;
 
-  @HasMany(() => Note) // Add the hasMany association
+  @HasMany(() => Note)
   notes!: Note[];
 }
 
