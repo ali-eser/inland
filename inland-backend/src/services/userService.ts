@@ -1,12 +1,13 @@
 import bcrypt from "bcrypt";  
 import User from "../models/user";
 
-const fetchUser = async (id? :number) => {
+const fetchUser = async (id :number) => {
   try {
-    if (id) {
-      return await User.findByPk(id);
+    const user: User | null = await User.findByPk(id)
+    if (!user) {
+      throw new Error(`User with specified ID "${id}" not found`);
     }
-    return await User.findAll({});
+    return user;
   } catch (error) {
     console.error(error);
     throw error;
