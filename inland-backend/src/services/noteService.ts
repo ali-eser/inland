@@ -71,7 +71,7 @@ const deleteNote = async (noteId: number) => {
   try {
     const note: Note | null = await Note.findByPk(noteId);
     if (!note) {
-      throw new Error(`The user with the specified ID ${noteId} does not exist`);
+      throw new Error(`The note with the specified ID ${noteId} does not exist`);
     }
 
     return await note.destroy();
