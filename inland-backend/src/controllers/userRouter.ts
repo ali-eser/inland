@@ -32,8 +32,25 @@ userRouter.post("/", async (req, res) => {
     }
     const userToAdd = await userService.addUser(username, email, password);
     res.status(201).json(userToAdd);
-  } catch (error) {
-    console.error("Error: ", error);
+  } catch (error: any) {
+    if (error.message.includes("provided username or email")) {
+      res.status(400).json({ error: error.message });
+    } else {
+      res.status(500).json({ error: error.message });
+    }
+  }
+});
+
+userRouter.delete("/:id", async (req, res) => {
+  try {
+    const id = parseInt(req.params.id);
+    if (isNaN(id)) {
+      res.status(400).json({ error: "Invalid user ID. ID must be an integer." });
+    }
+    await userService.removeUser(id);
+    res.status(204).json({message: `User with ID ${id} removed successfully`})
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
   }
 });
 
