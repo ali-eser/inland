@@ -4,7 +4,6 @@ import User from "../models/user";
 
 import { SECRET } from "../utils/config";
 
-
 export class AuthenticationError extends Error {
   constructor(message: string) {
     super(message);
