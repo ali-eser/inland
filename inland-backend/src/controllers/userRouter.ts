@@ -1,5 +1,6 @@
 import userService from "../services/userService";
 import express from "express";
+import { NotFoundError } from "../../exceptions/NotFoundError";
 
 const userRouter = express.Router();
 
@@ -11,13 +12,11 @@ userRouter.get("/:id", async (req, res) => {
     }
 
     const user = userService.fetchUser(id);
-
-    if (user) {
-      res.status(201).json(user);
-    } else {
-      res.status(404).json({ error: "User with specified ID not found"});
+    res.status(201).json(user);
+  } catch (error: any) {
+    if (error instanceof NotFoundError) {
+      res.status(error.statusCode).json({ error: error.message });
     }
-  } catch (error) {
     console.error("Error fetching user: ", error);
     res.status(500).json({ error: "Internal server error" });
   }
