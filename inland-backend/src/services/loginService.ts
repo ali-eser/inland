@@ -13,24 +13,30 @@ export class AuthenticationError extends Error {
 }
 
 const login = async (username: string, password: string) => {
-  const user = await User.findOne({ where: { username: username } });
+  try {
+    const user = await User.findOne({ where: { username: username } });
 
-  const isCorrect = user === null
-    ? false
-    : await bcrypt.compare(password, user.passwordHash)
+    const isCorrect = user === null
+      ? false
+      : await bcrypt.compare(password, user.passwordHash)
 
-  if (!(user && isCorrect)) {
-    throw new AuthenticationError("Invalid Credentials");
+    if (!(user && isCorrect)) {
+      throw new AuthenticationError("Invalid Credentials");
+    }
+
+    const userToLogin = {
+      username: user.username,
+      id: user.id
+    };
+
+    const token = jwt.sign(userToLogin, SECRET || "default_secret_key");
+
+    return { token, user: username, id: user.id };
+  } catch (error) {
+    console.error(error);
+    throw error;
   }
 
-  const userToLogin = {
-    username: user.username,
-    id: user.id
-  };
-
-  const token = jwt.sign(userToLogin, SECRET || "default_secret_key");
-
-  return { token, user: username, id: user.id };
 };
 
 export default { login };
