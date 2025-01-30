@@ -1,16 +1,9 @@
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import User from "../models/user";
+import { AuthenticationError } from "../../exceptions/AuthenticationError";
 
 import { SECRET } from "../utils/config";
-
-export class AuthenticationError extends Error {
-  constructor(message: string) {
-    super(message);
-    this.name = "AuthenticationError";
-    this.message = message;
-  };
-}
 
 const login = async (username: string, password: string) => {
   try {
