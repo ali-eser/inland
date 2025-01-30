@@ -1,5 +1,5 @@
 import loginService from '../services/loginService';
-import { AuthenticationError } from "../services/loginService";
+import { AuthenticationError } from '../../exceptions/AuthenticationError';
 import express from "express";
 
 const loginRouter: express.Router = express.Router();
