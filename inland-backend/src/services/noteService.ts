@@ -1,5 +1,6 @@
 import Note from "../models/note";
 import User from "../models/user";
+import { NotFoundError } from "../../exceptions/NotFoundError";
 
 const fetchNotesByUser = async (userId: number) => {
   try {
@@ -19,7 +20,7 @@ const fetchSingleNote = async (id: number ) => {
   try {
     const note: Note | null = await Note.findByPk(id);
     if (!note) {
-      throw new Error(`Note with the specified ID ${id} does not exist`);
+      throw new NotFoundError(`Note with the specified ID ${id} does not exist`);
     }
     return note;
   } catch (error) {
@@ -71,7 +72,7 @@ const deleteNote = async (noteId: number) => {
   try {
     const note: Note | null = await Note.findByPk(noteId);
     if (!note) {
-      throw new Error(`The note with the specified ID ${noteId} does not exist`);
+      throw new NotFoundError(`The note with the specified ID ${noteId} does not exist`);
     }
 
     return await note.destroy();
