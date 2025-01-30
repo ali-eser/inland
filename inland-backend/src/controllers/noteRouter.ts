@@ -1,5 +1,6 @@
 import noteService from "../services/noteService";
-import express, { request } from "express";
+import express from "express";
+import { NotFoundError } from "../../exceptions/NotFoundError";
 
 const noteRouter = express.Router();
 
@@ -12,8 +13,8 @@ noteRouter.get("/:id", async (req, res) => {
     const notes = await noteService.fetchNotesByUser(id);
     res.status(204).json({ notes: notes });
   } catch (error: any) {
-    if (error.message.includes("User doesn't exist")) {
-      res.status(404).json({ error: error.message });
+    if (error instanceof NotFoundError) {
+      res.status(error.statusCode).json({ error: error.message });
     } else {
       res.status(500).json({ error: error.message });
     }
@@ -30,8 +31,8 @@ noteRouter.get("/single/:id", async (req, res) => {
     const note = await noteService.fetchSingleNote(id);
     res.status(201).json(note);
   } catch (error: any) {
-    if (error.message.includes("Note with specified ID")) {
-      res.status(404).json({ error: error.message });
+    if (error instanceof NotFoundError) {
+      res.status(error.statusCode).json({ error: error.message });
     } else {
       res.status(500).json({ error: error.message });
     }
@@ -73,8 +74,8 @@ noteRouter.put("/:id", async (req, res) => {
     const updatedNote = await noteService.updateNote(id, content);
     res.status(204).json({ updatedNote });
   } catch (error: any) {
-    if (error.message.includes("specified ID")) {
-      res.status(404).json({error: error.message});
+    if (error instanceof NotFoundError) {
+      res.status(error.statusCode).json({error: error.message});
     } else {
       res.status(500).json({ error: error.message });
     }
@@ -91,8 +92,8 @@ noteRouter.delete("/:id", async (req, res) => {
     await noteService.deleteNote(id);
     res.status(204).json({ message: `The note with ID ${id} deleted successfully` });
   } catch (error: any) {
-    if (error.message.includes("specified ID")) {
-      res.status(404).json({error: error.message});
+    if (error instanceof NotFoundError) {
+      res.status(error.statusCode).json({error: error.message});
     } else {
       res.status(500).json({ error: error.message });
     }
