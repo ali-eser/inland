@@ -1,0 +1,174 @@
+import { useState } from "react"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import { z } from "zod"
+
+import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "@/components/ui/form"
+
+
+const SignUpSchema = z.object({
+  username: z.string().min(2, {
+    message: "Username must be at least 3 characters."
+  }),
+  email: z.string().email({ 
+    message: "Invalid email format" 
+  }),
+  password: z.string().min(8, {
+    message: "Password must be at least 8 characters"
+  }),
+  passwordConf: z.string()
+}).refine((data) => data.password === data.passwordConf, {
+  message: "Passwords do not match",
+  path: ["passwordConf"]
+});
+
+const LoginSchema = z.object({
+  username: z.string(),
+  password: z.string()
+});
+
+
+
+const Login = () => {
+  const [isSignUp, setIsSignUp] = useState(false);
+
+  const signupForm = useForm<z.infer<typeof SignUpSchema>>({
+    resolver: zodResolver(SignUpSchema),
+    defaultValues: {
+      username: "",
+      email: "",
+      password: "",
+      passwordConf: ""
+    },
+  })
+
+  const loginForm = useForm<z.infer<typeof SignUpSchema>>({
+    resolver: zodResolver(LoginSchema),
+    defaultValues: {
+      username: "",
+      password: ""
+    },
+  })
+
+
+  const handleSignUp = async () => {
+    console.log()
+  }
+
+  const handleLogin = async () => {
+    console.log()
+  }
+
+  return (
+    <div id="user-screen">
+      <h1 id="splash">inland</h1>
+      <hr />
+      {isSignUp === true && (
+        <section id="login-or-signup-form">
+          <p className="form-title">Sign up</p>
+          <Form {...signupForm}>
+            <form onSubmit={signupForm.handleSubmit(handleSignUp)} className="w-2/3 space-y-6">
+              <FormField
+                control={signupForm.control}
+                name="username"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Input minLength={3} placeholder="Username" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={signupForm.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Input type="email"  placeholder="Email" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={signupForm.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Input type="password" minLength={8} placeholder="Password, 8 characters minimum." {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={signupForm.control}
+                name="passwordConf"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Input type="password" minLength={8} placeholder="Password confirmation" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <Button type="submit">Sign up</Button>
+            </form>
+          </Form>
+          <br />
+          <h5>or if you already have an account, <a onClick={() => setIsSignUp(false)}><u>login</u></a>.</h5>
+        </section>
+      )}
+      {isSignUp === false && (
+        <section id="login-or-signup-form">
+          <p className="form-title">Login</p>
+          <Form {...loginForm}>
+            <form onSubmit={loginForm.handleSubmit(handleLogin)} className="w-2/3 space-y-6">
+              <FormField
+                control={loginForm.control}
+                name="username"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Input minLength={3} placeholder="Username" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={loginForm.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Input type="password" minLength={8} placeholder="Password" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <Button type="submit">Login</Button>
+            </form>
+          </Form>
+          <br />
+          <h5>or if you do not have an account, <a onClick={() => setIsSignUp(true)}><u>create one now</u></a>.</h5>
+        </section>
+      )}
+    </div>
+  )
+}
+
+export default Login;
