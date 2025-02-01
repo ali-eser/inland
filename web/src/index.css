@@ -18,8 +18,8 @@ body {
 
 #user-screen > hr {
   width: 1px;
-  height: 100vh;
-  background-color: #818181;
+  height: 60vh;
+  background-color: #d4d4d4;;
 }
 
 #login-or-signup-form {
@@ -33,13 +33,19 @@ body {
 }
 
 .form-title {
-  font-size: 32px;
+  font-size: 48px;
+  font-family: "Instrument Serif", serif;;
   font-weight: 500;
   margin-bottom: 25px;
 }
 
+.form-footer {
+  margin-top: 25px;
+}
+
 #splash {
-  font-size: 85px;
+  font-size: 110px;
+  font-family: "Instrument Serif", serif;
   margin-right: 150px;
 }
 
@@ -48,7 +54,7 @@ body {
     color: #213547;
     background-color: #ffffff;
   }
-  #login-screen > hr {
+  #user-screen > hr {
     background-color: #213547;
   }
   a:hover {
