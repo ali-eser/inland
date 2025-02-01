@@ -58,7 +58,6 @@ const Login = () => {
     },
   })
 
-
   const handleSignUp = async () => {
     console.log()
   }
@@ -69,7 +68,7 @@ const Login = () => {
 
   return (
     <div id="user-screen">
-      <h1 id="splash">inland</h1>
+      <h1 id="splash">inland.</h1>
       <hr />
       {isSignUp === true && (
         <section id="login-or-signup-form">
@@ -128,7 +127,7 @@ const Login = () => {
             </form>
           </Form>
           <br />
-          <h5>or if you already have an account, <a onClick={() => setIsSignUp(false)}><u>login</u></a>.</h5>
+          <p className="form-footer">or if you already have an account, <a onClick={() => setIsSignUp(false)}><u>login</u></a>.</p>
         </section>
       )}
       {isSignUp === false && (
@@ -163,8 +162,7 @@ const Login = () => {
               <Button type="submit">Login</Button>
             </form>
           </Form>
-          <br />
-          <h5>or if you do not have an account, <a onClick={() => setIsSignUp(true)}><u>create one now</u></a>.</h5>
+          <p className="form-footer">or if you do not have an account, <a onClick={() => setIsSignUp(true)}><u>create one now</u></a>.</p>
         </section>
       )}
     </div>
