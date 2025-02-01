@@ -2,7 +2,7 @@ import bcrypt from "bcrypt";
 import User from "../models/user";
 import { NotFoundError } from "../../exceptions/NotFoundError";
 
-const fetchUser = async (id :number) => {
+const fetchUser = async (id: number) => {
   try {
     const user: User | null = await User.findByPk(id)
     if (!user) {
