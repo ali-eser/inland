@@ -127,7 +127,7 @@ const Login = () => {
             </form>
           </Form>
           <br />
-          <p className="form-footer">or if you already have an account, <a onClick={() => setIsSignUp(false)}><u>login</u></a>.</p>
+          <p className="form-footer">or if you already have an account, <a className="footer-link" onClick={() => setIsSignUp(false)}><u>login</u></a>.</p>
         </section>
       )}
       {isSignUp === false && (
@@ -162,7 +162,7 @@ const Login = () => {
               <Button type="submit">Login</Button>
             </form>
           </Form>
-          <p className="form-footer">or if you do not have an account, <a onClick={() => setIsSignUp(true)}><u>create one now</u></a>.</p>
+          <p className="form-footer">or if you do not have an account, <a className="footer-link" onClick={() => setIsSignUp(true)}><u>create one now</u></a>.</p>
         </section>
       )}
     </div>

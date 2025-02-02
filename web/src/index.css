@@ -49,6 +49,10 @@ body {
   margin-right: 150px;
 }
 
+.footer-link {
+  cursor: pointer;
+}
+
 @media (prefers-color-scheme: light) {
   body {
     color: #213547;
