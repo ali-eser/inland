@@ -15,16 +15,20 @@ const fetchUser = async (id: number) => {
   }
 };
 
-const addUser = async (username: string, email: string, password: string) => {
+const addUser = async (username: string, email: string, password: string, passwordConf: string) => {
   try {
-    const saltRounds = await bcrypt.genSalt(10);
-    const passwordHash = await bcrypt.hash(password, saltRounds);
+    if (password === passwordConf) {
+      const saltRounds = await bcrypt.genSalt(10);
+      const passwordHash = await bcrypt.hash(password, saltRounds);
 
-    return await User.create({
-      username,
-      email,
-      passwordHash
-    });
+      return await User.create({
+        username,
+        email,
+        passwordHash
+      });
+    } else {
+      throw new Error("Passwords don't match")
+    }
   } catch (error: any) {
     console.error("Error creating user: ", error);
 
