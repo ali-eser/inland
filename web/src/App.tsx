@@ -1,9 +1,12 @@
-import UserForm from './components/Login'
+import Login from "./components/Login"
+import { ThemeProvider } from "@/components/theme-provider"
 
-const App  = () => {
+const App = () => {
   return (
     <>
-      <UserForm />
+      <ThemeProvider>
+        <Login />
+      </ThemeProvider>
     </>
   )
 }
