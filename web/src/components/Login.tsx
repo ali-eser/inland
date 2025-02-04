@@ -201,8 +201,8 @@ const Login = () => {
       <section style={{ padding: "15px", position: "absolute", right: "0px" }}>
         <ModeToggle />
       </section>
-    </div>
-      </>
+      </div>
+    </>
 
   )
 }
