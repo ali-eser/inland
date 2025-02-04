@@ -15,7 +15,7 @@ console.log("Connecting to the DB");
 const sequelize = new Sequelize(
   `postgresql://${DATABASE_USER}:${DATABASE_PASSWORD}@${DATABASE_HOST}:${DATABASE_PORT}/${DATABASE_NAME}`, {
     dialect: "postgres",
-    logging: console.log,
+    logging: false,
     models: [User, Note]
   }
 );
