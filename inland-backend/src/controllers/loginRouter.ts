@@ -12,9 +12,9 @@ loginRouter.post("/", async (req, res) => {
     res.status(200).json(user);
   } catch (error: any) {
     if (error instanceof AuthenticationError) {
-      res.status(400).json({ Error: "Invalid Credentials" });
+      res.status(400).json({ error: "Invalid Credentials" });
     } else {
-      res.status(500).json({ Error: error.message });
+      res.status(500).json({ error: error.message });
     }
   }
 });
