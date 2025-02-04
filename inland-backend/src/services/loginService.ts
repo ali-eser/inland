@@ -1,4 +1,4 @@
-import jwt from "jsonwebtoken";
+import jwt, { JwtPayload } from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import User from "../models/user";
 import { AuthenticationError } from "../../exceptions/AuthenticationError";
@@ -22,14 +22,34 @@ const login = async (username: string, password: string) => {
       id: user.id
     };
 
-    const token = jwt.sign(userToLogin, SECRET || "default_secret_key");
+    const accessToken = jwt.sign(userToLogin, SECRET as string, {
+      expiresIn: "1h"
+    });
 
-    return { token, user: username, id: user.id };
+    const refreshToken = jwt.sign(userToLogin, SECRET as string, {
+      expiresIn: "7d"
+    });
+
+    return { accessToken, refreshToken, user: username, id: user.id };
   } catch (error) {
     console.error(error);
     throw error;
   }
-
 };
 
-export default { login };
+const refresh = async (refreshToken: string) => {
+  try {
+    const decoded = jwt.verify(refreshToken, SECRET as string) as JwtPayload;
+
+    const newAccessToken = jwt.sign({ user: decoded.user, id: decoded.id }, SECRET as string, {
+      expiresIn: "1h"
+    });
+
+    return newAccessToken;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
+export default { login, refresh };
