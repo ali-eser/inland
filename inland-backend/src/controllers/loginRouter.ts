@@ -7,7 +7,6 @@ const loginRouter: express.Router = express.Router();
 loginRouter.post("/", async (req, res) => {
   try {
     const { username, password } = req.body;
-    console.log(username, password);
     const user = await loginService.login(username, password);
 
     res.cookie("token", user.accessToken, {
@@ -27,7 +26,7 @@ loginRouter.post("/", async (req, res) => {
     res.status(200).json({ message: "Logged in successfully", user: user.user, id: user.id });
   } catch (error: any) {
     if (error instanceof AuthenticationError) {
-      res.status(400).json({ error: "Invalid username or password" });
+      res.status(400).json({ error: error.message });
     } else {
       res.status(500).json({ error: "An unspecified error occurred" });
     }
