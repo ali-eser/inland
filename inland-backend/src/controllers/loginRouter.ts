@@ -9,7 +9,7 @@ loginRouter.post("/", async (req, res) => {
     const { username, password } = req.body;
     const user = await loginService.login(username, password);
 
-    res.cookie("token", user.accessToken, {
+    res.cookie("accessToken", user.accessToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
@@ -42,7 +42,7 @@ loginRouter.post("/refresh" , async (req, res) => {
   try {
     const newAccessToken = await loginService.refresh(refreshToken);
 
-    res.cookie("token", newAccessToken, {
+    res.cookie("accessToken", newAccessToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
