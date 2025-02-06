@@ -16,4 +16,25 @@ authRouter.get("/status", async (req, res) => {
   }
 });
 
+authRouter.post("/refresh" , async (req, res) => {
+  const refreshToken = req.cookies.refreshToken;
+  if (!refreshToken) {
+    res.status(401).json({ error: "No refresh token provided" });
+  }
+
+  try {
+    const newAccessToken = await authService.refresh(refreshToken);
+
+    res.cookie("accessToken", newAccessToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: 60 * 60 * 1000
+    });
+  } catch (error: any) {
+    console.error(error, error.message);
+    throw error;
+  }
+});
+
 export default authRouter;
