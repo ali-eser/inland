@@ -37,19 +37,4 @@ const login = async (username: string, password: string) => {
   }
 };
 
-const refresh = async (refreshToken: string) => {
-  try {
-    const decoded = jwt.verify(refreshToken, SECRET as string) as JwtPayload;
-
-    const newAccessToken = jwt.sign({ user: decoded.user, id: decoded.id }, SECRET as string, {
-      expiresIn: "1h"
-    });
-
-    return newAccessToken;
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
-}
-
-export default { login, refresh };
+export default { login };
