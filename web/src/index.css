@@ -50,6 +50,7 @@
   font-size: 110px;
   font-family: "Instrument Serif", serif;
   margin-right: 150px;
+  text-shadow: 0 0 1px black;
 }
 
 .footer-link {
