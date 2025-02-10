@@ -78,7 +78,6 @@ const Login = () => {
   }
 
   const handleLogin = async (data: object) => {
-    console.log(data)
     const response = await userService.login(data);
     if ('user' in response && 'id' in response) {
       const userToLogin = { user: response.user, id: response.id }
