@@ -3,6 +3,8 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import userService from "@/services/userService"
+import { initUser } from "@/reducers/userReducer"
+import { useDispatch } from "react-redux"
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Input } from "@/components/ui/input"
@@ -39,6 +41,7 @@ const LoginSchema = z.object({
 });
 
 const Login = () => {
+  const dispatch = useDispatch();
   const [isSignUp, setIsSignUp] = useState(false);
   const [isError, setIsError] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
@@ -77,8 +80,11 @@ const Login = () => {
   const handleLogin = async (data: object) => {
     console.log(data)
     const response = await userService.login(data);
-    console.log(response);
-    if (Object.hasOwn(response,'error')) {
+    if ('user' in response && 'id' in response) {
+      const userToLogin = { user: response.user, id: response.id }
+      console.log(userToLogin);
+      dispatch(initUser(response));
+    } else if ('error' in response) {
       setIsError(true);
       setErrorMsg((response as { error: string }).error);
       setTimeout(() => {
