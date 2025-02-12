@@ -8,7 +8,7 @@ const login = async (data: object) => {
     body: JSON.stringify(data)
   });
 
-  const jsonRes: object = await response.json();
+  const jsonRes = await response.json();
   return jsonRes;
 }
 
@@ -19,7 +19,7 @@ const signUp = async (data: object) => {
     body: JSON.stringify(data)
   });
 
-  const jsonRes: object = await response.json();
+  const jsonRes = await response.json();
   return jsonRes;
 }
 
