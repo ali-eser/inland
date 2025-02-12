@@ -1,23 +1,18 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { Dispatch } from "@reduxjs/toolkit";
-import { User } from "@/types";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { User, UserState } from "@/types";
+
+const initialState = null as UserState;
 
 const userSlice = createSlice({
   name: "user",
-  initialState: null,
+  initialState,
   reducers: {
-    setUser(_state, action) {
-      return action.payload
+    setUser(_state, action: PayloadAction<User>) {
+      return action.payload;
     }
   }
 });
 
 export const { setUser } = userSlice.actions;
-
-export const initUser = (user: User) => {
-  return (dispatch: Dispatch) => {
-    dispatch(setUser(user));
-  }
-};
 
 export default userSlice.reducer;
