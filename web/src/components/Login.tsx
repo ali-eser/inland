@@ -1,11 +1,12 @@
-import { useState } from "react"
-import { zodResolver } from "@hookform/resolvers/zod"
+import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
-import { z } from "zod"
+import { useDispatch, useSelector } from "react-redux"
 import userService from "@/services/userService"
-import { initUser } from "@/reducers/userReducer"
-import { useDispatch } from "react-redux"
+import { setUser } from "@/reducers/userReducer"
+import { User, UserState } from "@/types"
 
+import { z } from "zod"
+import { zodResolver } from "@hookform/resolvers/zod"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
@@ -42,9 +43,14 @@ const LoginSchema = z.object({
 
 const Login = () => {
   const dispatch = useDispatch();
+  const userRedux: UserState = useSelector(({user}: {user: User}) => user);
   const [isSignUp, setIsSignUp] = useState(false);
   const [isError, setIsError] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
+
+  useEffect(() => {
+    console.log("user logged in: ", userRedux);
+  }, [userRedux])
 
   const signupForm = useForm<z.infer<typeof SignUpSchema>>({
     resolver: zodResolver(SignUpSchema),
@@ -80,9 +86,8 @@ const Login = () => {
   const handleLogin = async (data: object) => {
     const response = await userService.login(data);
     if ('user' in response && 'id' in response) {
-      const userToLogin = { user: response.user, id: response.id }
-      console.log(userToLogin);
-      dispatch(initUser(response));
+      const userToLogin: User = { user: response.user as string, id: response.id as number }
+      dispatch(setUser(userToLogin));
     } else if ('error' in response) {
       setIsError(true);
       setErrorMsg((response as { error: string }).error);
