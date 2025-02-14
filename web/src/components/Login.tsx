@@ -43,7 +43,7 @@ const LoginSchema = z.object({
 
 const Login = () => {
   const dispatch = useDispatch();
-  const userRedux: UserState = useSelector(({user}: {user: User}) => user);
+  const userRedux: UserState = useSelector(({user}: {user: User}): User => user);
   const [isSignUp, setIsSignUp] = useState(false);
   const [isError, setIsError] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
