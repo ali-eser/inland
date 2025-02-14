@@ -1,12 +1,12 @@
-import Login from "./components/Login"
-import { ThemeProvider } from "@/components/theme-provider"
+import { Routes, Route } from "react-router"
+import Login from "@/components/Login"
 
 const App = () => {
   return (
     <>
-      <ThemeProvider>
-        <Login />
-      </ThemeProvider>
+      <Routes>
+        <Route path="/auth" element={<Login />} />
+      </Routes>
     </>
   )
 }
