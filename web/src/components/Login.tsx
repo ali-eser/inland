@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"
+import { useNavigate } from "react-router"
 import { useForm } from "react-hook-form"
 import { useDispatch, useSelector } from "react-redux"
 import userService from "@/services/userService"
@@ -43,6 +44,7 @@ const LoginSchema = z.object({
 
 const Login = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const userRedux: UserState = useSelector(({user}: {user: User}): User => user);
   const [isSignUp, setIsSignUp] = useState(false);
   const [isError, setIsError] = useState(false);
@@ -87,7 +89,9 @@ const Login = () => {
     const response = await userService.login(data);
     if ('user' in response && 'id' in response) {
       const userToLogin: User = { user: response.user as string, id: response.id as number }
+      window.localStorage.setItem("loggedUser", userToLogin.user);
       dispatch(setUser(userToLogin));
+      navigate('/');
     } else if ('error' in response) {
       setIsError(true);
       setErrorMsg((response as { error: string }).error);
