@@ -90,6 +90,7 @@ const Login = () => {
     if ('user' in response && 'id' in response) {
       const userToLogin: User = { user: response.user as string, id: response.id as number }
       window.localStorage.setItem("loggedUser", userToLogin.user);
+      window.localStorage.setItem("loggedUserID", userToLogin.id);
       dispatch(setUser(userToLogin));
       navigate('/');
     } else if ('error' in response) {
