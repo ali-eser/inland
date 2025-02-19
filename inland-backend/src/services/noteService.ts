@@ -1,15 +1,10 @@
 import Note from "../models/note";
-import User from "../models/user";
 import { NotFoundError } from "../../exceptions/NotFoundError";
 
 const fetchNotesByUser = async (userId: number) => {
   try {
-    const user: User | null = await User.findByPk(userId);
-    if (user) {
-      return user;
-    } else {
-      throw new Error("User doesn't exist");
-    }
+    const notes: Note[] | null = await Note.findAll({ where: { userId: userId } })
+    return notes;
   } catch (error) {
     console.error("Error: ", error);
     throw error;
