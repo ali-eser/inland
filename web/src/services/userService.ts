@@ -1,4 +1,4 @@
-const baseURL = import.meta.env.VITE_BASE_URL
+const baseURL = import.meta.env.VITE_BASE_URL;
 
 const login = async (data: object) => {
   console.log("baseurl: ", baseURL);
@@ -23,4 +23,4 @@ const signUp = async (data: object) => {
   return jsonRes;
 }
 
-export default { login, signUp }
+export default { login, signUp };
