@@ -6,7 +6,7 @@ const fetchNotesByUser = async (userId: number) => {
   try {
     const user: User | null = await User.findByPk(userId);
     if (user) {
-      return user.notes;
+      return user;
     } else {
       throw new Error("User doesn't exist");
     }
@@ -31,7 +31,7 @@ const fetchSingleNote = async (id: number ) => {
 
 const createNote = async (userId: number, content: string, title?: string) => {
   try {
-    if (userId || content == null) {
+    if (!userId|| !content) {
       throw new Error("A note should have a user and content");
     }
     if (title) {
@@ -40,13 +40,13 @@ const createNote = async (userId: number, content: string, title?: string) => {
         content: content,
         title: title
       }
-      return await Note.create({ newNote });
+      return await Note.create(newNote);
     } else {
       const newNote =  {
         userId: userId,
         content: content
       }
-      return await Note.create({ newNote });
+      return await Note.create(newNote);
     }
   } catch (error) {
     console.log("Error: ", error);
