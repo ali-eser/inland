@@ -20,9 +20,6 @@ const sequelize = new Sequelize(
   }
 );
 
-Note.belongsTo(User);
-User.hasMany(Note);
-
 Note.sync({alter: true});
 User.sync({alter: true});
 
