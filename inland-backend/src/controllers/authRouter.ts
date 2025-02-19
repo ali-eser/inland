@@ -7,12 +7,15 @@ authRouter.get("/status", async (req, res) => {
   const accessToken = req.cookies.accessToken;
   if (!accessToken) {
     res.status(401).json({ error: "Not logged in" });
+    return;
   }
   try {
     const decoded = authService.authStatus(accessToken);
     res.status(201).json({ user: accessToken.username, id: accessToken.id });
+    return;
   } catch (error: any) {
-    res.status(401).json({ error: error.message })
+    res.status(401).json({ error: error.message });
+    return;
   }
 });
 
@@ -20,6 +23,7 @@ authRouter.post("/refresh" , async (req, res) => {
   const refreshToken = req.cookies.refreshToken;
   if (!refreshToken) {
     res.status(401).json({ error: "No refresh token provided" });
+    return;
   }
 
   try {
@@ -31,6 +35,7 @@ authRouter.post("/refresh" , async (req, res) => {
       sameSite: "strict",
       maxAge: 60 * 60 * 1000
     });
+    return;
   } catch (error: any) {
     console.error(error, error.message);
     throw error;
