@@ -13,5 +13,3 @@ export interface Note {
   createdAt: string,
   updatedAt: string
 }
-
-export type NoteState = Note | null;
