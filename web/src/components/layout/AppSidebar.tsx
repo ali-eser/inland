@@ -25,7 +25,7 @@ import {
 import { Note } from "@/types";
 
 const AppSidebar = ({ loggedUser, notes, handleLogout }: { loggedUser: string | null, notes: Note[], handleLogout: () => void }) => {
-  const formatDate = (dateString: string) => {
+  const formatDate = (dateString: string): string => {
     const days: string[] = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
     const months: string[] = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
     const date: Date = new Date(dateString);
