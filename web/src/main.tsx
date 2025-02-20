@@ -8,10 +8,12 @@ import { ThemeProvider } from "@/components/theme-provider"
 import './index.css'
 import App from './App.tsx'
 import userSlice from './reducers/userReducer.ts'
+import noteSlice from './reducers/noteReducer.ts'
 
 const store = configureStore({
   reducer: {
-    user: userSlice
+    user: userSlice,
+    notes: noteSlice
   }
 });
 
