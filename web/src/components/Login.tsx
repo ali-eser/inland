@@ -45,7 +45,7 @@ const LoginSchema = z.object({
 const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const userRedux: UserState = useSelector(({user}: {user: User}): User => user);
+  const userRedux: UserState = useSelector(({ user }: { user: User }): User => user);
   const [isSignUp, setIsSignUp] = useState(false);
   const [isError, setIsError] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
@@ -90,7 +90,7 @@ const Login = () => {
     if ('user' in response && 'id' in response) {
       const userToLogin: User = { user: response.user as string, id: response.id as number }
       window.localStorage.setItem("loggedUser", userToLogin.user);
-      window.localStorage.setItem("loggedUserID", userToLogin.id);
+      window.localStorage.setItem("loggedUserID", (userToLogin.id).toString());
       dispatch(setUser(userToLogin));
       navigate('/');
     } else if ('error' in response) {
