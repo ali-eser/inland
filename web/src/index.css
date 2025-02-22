@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+* {
+  font-family: "Figtree", sans-serif;
+}
+
 .alert {
   width: 300px;
   position: absolute;
