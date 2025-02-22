@@ -22,6 +22,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { ModeToggle } from "../mode-toggle";
 import { Note } from "@/types";
 
 const AppSidebar = ({ loggedUser, notes, handleLogout }: { loggedUser: string | null, notes: Note[], handleLogout: () => void }) => {
@@ -39,7 +40,7 @@ const AppSidebar = ({ loggedUser, notes, handleLogout }: { loggedUser: string | 
   return (
     <SidebarProvider>
       <Sidebar>
-        <SidebarHeader style={{fontFamily: "instrument serif", fontSize: "2em", marginLeft: "0.5rem"}}>inland.</SidebarHeader>
+        <SidebarHeader style={{ fontFamily: "instrument serif", fontSize: "2em", marginLeft: "0.5rem" }}>inland.</SidebarHeader>
         <SidebarContent>
           <SidebarGroup>
             <SidebarGroupLabel>Recent</SidebarGroupLabel>
@@ -70,23 +71,24 @@ const AppSidebar = ({ loggedUser, notes, handleLogout }: { loggedUser: string | 
           </SidebarGroup>
         </SidebarContent>
         {loggedUser && (
-          <SidebarFooter >
-          <DropdownMenu>
-            <DropdownMenuTrigger>
-              <div style={{ display: "flex", alignItems: "center" }}>
-                <Avatar>
-                  <AvatarFallback>
-                    {loggedUser[0].toUpperCase() + loggedUser[1].toUpperCase()}
-                  </AvatarFallback>
-                </Avatar>
-                <p style={{ marginLeft: "10px" }}>{loggedUser}</p>
-              </div>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <DropdownMenuItem onSelect={handleLogout}>Log out</DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </SidebarFooter>
+          <SidebarFooter style={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
+            <DropdownMenu>
+              <DropdownMenuTrigger>
+                <div style={{ display: "flex", alignItems: "center" }}>
+                  <Avatar>
+                    <AvatarFallback>
+                      {loggedUser[0].toUpperCase() + loggedUser[1].toUpperCase()}
+                    </AvatarFallback>
+                  </Avatar>
+                  <p style={{ marginLeft: "10px" }}>{loggedUser}</p>
+                </div>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuItem onSelect={handleLogout}>Log out</DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+            <ModeToggle />
+          </SidebarFooter>
         )}
       </Sidebar>
     </SidebarProvider>
