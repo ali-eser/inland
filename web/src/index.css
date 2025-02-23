@@ -41,7 +41,7 @@
 
 .form-title {
   font-size: 48px;
-  font-family: "Instrument Serif", serif;
+  font-family: "Sacramento", serif;
   font-weight: 500;
   margin-bottom: 25px;
 }
@@ -51,8 +51,8 @@
 }
 
 #splash {
-  font-size: 110px;
-  font-family: "Instrument Serif", serif;
+  font-size: 140px;
+  font-family: "Sacramento", serif;
   margin-right: 150px;
   text-shadow: 0 0 1px black;
 }
@@ -141,4 +141,9 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+@font-face {
+  font-family: "Sacramento";
+  src: url(/src/assets/fonts/Sacramento-Regular.ttf);
 }
