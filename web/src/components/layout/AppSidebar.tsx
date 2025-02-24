@@ -25,7 +25,7 @@ import {
 import { ModeToggle } from "../mode-toggle";
 import { Note } from "@/types";
 
-const AppSidebar = ({ loggedUser, notes, handleLogout }: { loggedUser: string | null, notes: Note[], handleLogout: () => void }) => {
+const AppSidebar = ({ loggedUser, notes, handleLogout, handleSelectedNote }: { loggedUser: string | null, notes: Note[], handleLogout: () => void, handleSelectedNote: (content: string) => void }) => {
   const formatDate = (dateString: string): string => {
     const days: string[] = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
     const months: string[] = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
@@ -40,7 +40,7 @@ const AppSidebar = ({ loggedUser, notes, handleLogout }: { loggedUser: string | 
   return (
     <SidebarProvider>
       <Sidebar>
-        <SidebarHeader style={{ fontFamily: "instrument serif", fontSize: "2em", marginLeft: "0.5rem" }}>inland.</SidebarHeader>
+        <SidebarHeader style={{ fontFamily: "sacramento", fontSize: "2.3em", marginLeft: "0.5rem", marginTop: "4px", marginBottom: "-24px" }}>inland.</SidebarHeader>
         <SidebarContent>
           <SidebarGroup>
             <SidebarGroupLabel>Recent</SidebarGroupLabel>
@@ -48,8 +48,8 @@ const AppSidebar = ({ loggedUser, notes, handleLogout }: { loggedUser: string | 
               <SidebarMenu>
                 {formattedNotes.length > 0 ? ( formattedNotes.map(n => (
                   <SidebarMenuItem key={n.id}>
-                    <SidebarMenuButton asChild style={{ paddingTop: 25, paddingBottom: 25 }}>
-                      <a href={""}>
+                    <SidebarMenuButton asChild style={{ paddingTop: 25, paddingBottom: 25 }} onClick={() => handleSelectedNote(n.content)}>
+                      <a href={"#"}>
                         <div style={{ display: "flex", flexDirection: "column" }}>
                           {n.content.length > 30 ? (
                             <span>{n.content.slice(0, 30) + "..."}</span>
