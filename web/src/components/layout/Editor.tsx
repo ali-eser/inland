@@ -24,9 +24,10 @@ const Editor = ({ note }: { note: Note | Record<string, never> }) => {
   }, [editor, note]);
 
   return (
-    <div style={{ padding: '2rem' }}>
       <div style={{
         display: 'flex',
+        padding: '2rem',
+        width: '100%',
         flexDirection: 'column',
         justifyContent: 'flex-start',
         alignItems: 'center',
@@ -39,7 +40,6 @@ const Editor = ({ note }: { note: Note | Record<string, never> }) => {
         </p>
         <EditorContent spellCheck="false" className="editor-content" editor={editor} />
       </div>
-    </div>
   )
 };
 
