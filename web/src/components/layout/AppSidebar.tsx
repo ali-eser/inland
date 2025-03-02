@@ -22,17 +22,12 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { LucideFilePlus2, LucideSave } from "lucide-react"; 
 import { ModeToggle } from "../mode-toggle";
+import { formatDate } from "@/utils/formatDate";
 import { Note } from "@/types";
 
-const AppSidebar = ({ loggedUser, notes, handleLogout, handleSelectedNote }: { loggedUser: string | null, notes: Note[], handleLogout: () => void, handleSelectedNote: (content: string) => void }) => {
-  const formatDate = (dateString: string): string => {
-    const days: string[] = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-    const months: string[] = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-    const date: Date = new Date(dateString);
-    return days[date.getDay()] + ", " + months[date.getMonth()] + " " + date.getDate() + " at "  + date.getHours() + ":" + date.getMinutes();
-  }
-
+const AppSidebar = ({ loggedUser, notes, handleLogout, handleSelectedNote }: { loggedUser: string | null, notes: Note[], handleLogout: () => void, handleSelectedNote: (n: Note) => void }) => {
   const formattedNotes = notes.map(n => {
     return {...n, updatedAt: formatDate(n.updatedAt), createdAt: formatDate(n.createdAt)}
   });
@@ -40,15 +35,26 @@ const AppSidebar = ({ loggedUser, notes, handleLogout, handleSelectedNote }: { l
   return (
     <SidebarProvider>
       <Sidebar>
-        <SidebarHeader style={{ fontFamily: "sacramento", fontSize: "2.3em", marginLeft: "0.5rem", marginTop: "4px", marginBottom: "-24px" }}>inland.</SidebarHeader>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginLeft: "0.5rem", marginRight: "0.5rem",  marginBottom: "-16px" }}>
+          <SidebarHeader style={{ fontFamily: "sacramento", fontSize: "2.3em" }}>inland.</SidebarHeader>
+          <div style={{ display: "flex" }}>
+            <LucideFilePlus2 className="h-[1.2rem] w-[1.2rem]" style={{ marginBottom: 7 }} />
+            <LucideSave className="h-[1.2rem] w-[1.2rem]" style={{ marginBottom: 7 }} />
+          </div>
+        </div>
         <SidebarContent>
           <SidebarGroup>
-            <SidebarGroupLabel>Recent</SidebarGroupLabel>
+            <SidebarGroupLabel>RECENT</SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
                 {formattedNotes.length > 0 ? ( formattedNotes.map(n => (
                   <SidebarMenuItem key={n.id}>
-                    <SidebarMenuButton asChild style={{ paddingTop: 25, paddingBottom: 25 }} onClick={() => handleSelectedNote(n.content)}>
+                    <SidebarMenuButton asChild
+                      style={{ paddingTop: 25, paddingBottom: 25 }}
+                      onClick={() => {
+                        handleSelectedNote(n);
+                      }}
+                    >
                       <a href={"#"}>
                         <div style={{ display: "flex", flexDirection: "column" }}>
                           {n.content.length > 30 ? (
