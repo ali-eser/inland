@@ -1,28 +1,45 @@
 import { useEffect } from "react";
-import { useEditor, FloatingMenu, BubbleMenu, EditorContent } from "@tiptap/react"
+import { useEditor, EditorContent } from "@tiptap/react"
 import StarterKit from "@tiptap/starter-kit"
+import { Note } from "@/types";
 
 const extensions = [StarterKit]
 
-const Editor = ({ content }: { content: string }) => {
+const Editor = ({ note }: { note: Note | Record<string, never> }) => {
 
   const editor = useEditor({
     extensions,
-    content,
+    content: note.content,
+    editorProps: {
+      attributes: {
+        class: 'prose prose-sm sm:prose-base lg:prose-lg xl:prose-2xl focus:outline-none',
+      },
+    },
   })
 
   useEffect(() => {
-    if (editor && content) {
-      editor.commands.setContent(content)
+    if (editor && note) {
+      editor.commands.setContent(note.content)
     }
-  }, [editor, content]);
+  }, [editor, note]);
 
   return (
-    <>
-      <EditorContent editor={editor} />
-      <FloatingMenu editor={editor}>This is the floating menu</FloatingMenu>
-      <BubbleMenu editor={editor}>This is the bubble menu</BubbleMenu>
-    </>
+    <div style={{ padding: '2rem' }}>
+      <div style={{
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'flex-start',
+        alignItems: 'center',
+      }}>
+        <p
+          style={{ fontSize: "0.77em", marginTop: -15, marginBottom: 5 }}
+          className="text-muted-foreground font-semibold"
+        >
+          {note.updatedAt}
+        </p>
+        <EditorContent spellCheck="false" className="editor-content" editor={editor} />
+      </div>
+    </div>
   )
 };
 
