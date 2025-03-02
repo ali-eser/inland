@@ -54,14 +54,12 @@ const NoteApp = () => {
 
   return (
     <div style={{ display: "flex", overflow: "hidden" }}>
-      <div style={{ width: "256px", flexShrink: 0 }}>
         <AppSidebar
           loggedUser={loggedUser}
           notes={noteState}
           handleLogout={handleLogout}
           handleSelectedNote={handleSelectedNote}
         />
-      </div>
       <div style={{ flex: 1, display: "flex", justifyContent: "center", alignItems: "center" }} >
         {/*<div style={{ whiteSpace: 'nowrap' }}>
           <NoteTabs activeNotes={activeNotes} handleSelectedNote={handleSelectedNote} activeTab={activeTab} />
