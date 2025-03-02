@@ -65,22 +65,19 @@
   outline: none !important;
   padding-top: 2rem;
   padding-bottom: 2rem;
-  min-height: 85vh;
-  border: 1px solid red;
+  min-height: 90vh;
   text-align: left;
+  width: inherit;
 }
 
 .ProseMirror p {
-  margin-bottom: 1rem;
-  width: 100%;
-  border: 1px solid green;
   line-height: 1.5;
 }
 
 .editor-content {
-  border: 1px solid;
   outline: none;
-  width: 70vw;
+  width: inherit;
+
 }
 
 @layer base {

@@ -62,7 +62,7 @@ const NoteApp = () => {
           handleSelectedNote={handleSelectedNote}
         />
       </div>
-      <div style={{ flex: 1, display: "flex", justifyContent: "center", alignItems: "flex-start" }} >
+      <div style={{ flex: 1, display: "flex", justifyContent: "center", alignItems: "center" }} >
         {/*<div style={{ whiteSpace: 'nowrap' }}>
           <NoteTabs activeNotes={activeNotes} handleSelectedNote={handleSelectedNote} activeTab={activeTab} />
         </div>*/}
