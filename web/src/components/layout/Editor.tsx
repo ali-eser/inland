@@ -1,9 +1,10 @@
 import { useEffect } from "react";
 import { useEditor, EditorContent } from "@tiptap/react"
 import StarterKit from "@tiptap/starter-kit"
+import Typography from "@tiptap/extension-typography"
 import { Note } from "@/types";
 
-const extensions = [StarterKit]
+const extensions = [StarterKit, Typography]
 
 const Editor = ({ note }: { note: Note | Record<string, never> }) => {
 
@@ -26,14 +27,16 @@ const Editor = ({ note }: { note: Note | Record<string, never> }) => {
   return (
       <div style={{
         display: 'flex',
-        padding: '2rem',
+        paddingLeft: '4rem',
+        paddingRight: '4rem',
         width: '100%',
         flexDirection: 'column',
         justifyContent: 'flex-start',
         alignItems: 'center',
+        overflow: 'hidden'
       }}>
         <p
-          style={{ fontSize: "0.77em", marginTop: -15, marginBottom: 5 }}
+          style={{ fontSize: "0.77em" }}
           className="text-muted-foreground font-semibold"
         >
           {note.updatedAt}
