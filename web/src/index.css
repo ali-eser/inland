@@ -72,12 +72,12 @@
 
 .ProseMirror p {
   line-height: 1.5;
+  margin: auto;
 }
 
 .editor-content {
   outline: none;
   width: inherit;
-
 }
 
 @layer base {
@@ -114,7 +114,7 @@
 
   .dark {
     --background: 216 37.6% 9.5%;
-    --foreground: 216 3.5% 99%;
+    --foreground: 216 6.5% 75%;
     --card: 216 34.5% 9%;
     --card-foreground: 216 3.5% 99%;
     --popover: 216 37.6% 5%;
@@ -134,7 +134,7 @@
     --ring: 216 88.7% 45.3%;
     --radius: 0.4rem;
     --sidebar-background: 216, 38%, 12%;
-    --sidebar-foreground: 216, 4%, 100%;
+    --sidebar-foreground: 216, 30%, 80%;
     --sidebar-primary: 216, 100%, 26%;
     --sidebar-primary-foreground: 0 0% 100%;
     --sidebar-accent: 254, 24%, 20%;
