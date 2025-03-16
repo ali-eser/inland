@@ -2,6 +2,7 @@ import {
   Avatar,
   AvatarFallback 
 } from "@/components/ui/avatar"
+import { Button } from "../ui/button"; 
 import {
   Sidebar,
   SidebarContent,
@@ -37,9 +38,9 @@ const AppSidebar = ({ loggedUser, notes, handleLogout, handleSelectedNote }: { l
       <Sidebar>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginLeft: "0.5rem", marginRight: "0.5rem",  marginBottom: "-16px" }}>
           <SidebarHeader style={{ fontFamily: "sacramento", fontSize: "2.3em" }}>inland.</SidebarHeader>
-          <div style={{ display: "flex" }}>
-            <LucideFilePlus2 className="h-[1.2rem] w-[1.2rem]" style={{ marginBottom: 7 }} />
-            <LucideSave className="h-[1.2rem] w-[1.2rem]" style={{ marginBottom: 7 }} />
+          <div style={{ display: "flex", marginBottom: 7 }}>
+            <Button variant="ghost" size="sm"><LucideFilePlus2 className="h-[1.2rem] w-[1.2rem]"/></Button>
+            <Button variant="ghost" size="sm"><LucideSave className="h-[1.2rem] w-[1.2rem]" /></Button>
           </div>
         </div>
         <SidebarContent>
