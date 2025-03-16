@@ -55,8 +55,8 @@ const updateNote = async (noteId: number, content: string) => {
     if (!note) {
       throw new Error(`The note with the specified ID ${noteId} does not exist`);
     }
-
-    return await note.update({ content: content });
+    const updatedNote = await note.update({ content: content })
+    return updatedNote;
   } catch (error) {
     console.error("Error: ", error);
     throw error;
