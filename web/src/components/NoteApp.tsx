@@ -35,6 +35,11 @@ const NoteApp = () => {
     setActiveTab(n.id.toString());
   }
 
+  const handleNotePut =  async (n: Note) => {
+    const response = await noteService.updateNote(n);
+    console.log(response);
+  }
+
   useEffect(() => {
     if (!loggedUser || !loggedUserID) {
       navigate('/auth');
@@ -64,7 +69,10 @@ const NoteApp = () => {
         {/*<div style={{ whiteSpace: 'nowrap' }}>
           <NoteTabs activeNotes={activeNotes} handleSelectedNote={handleSelectedNote} activeTab={activeTab} />
         </div>*/}
-            <Editor note={selectedNote} />
+            <Editor
+              note={selectedNote}
+              handleNotePut={handleNotePut} 
+            />
       </div>
     </div>
   )
