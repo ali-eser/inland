@@ -25,7 +25,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { LucideFilePlus2, LucideSave } from "lucide-react"; 
 import { ModeToggle } from "../mode-toggle";
-import { formatDate } from "@/utils/formatDate";
+import { getTextFromHtml, formatDate } from "@/utils/utils";
 import { Note } from "@/types";
 
 const AppSidebar = ({ loggedUser, notes, handleLogout, handleSelectedNote }: { loggedUser: string | null, notes: Note[], handleLogout: () => void, handleSelectedNote: (n: Note) => void }) => {
@@ -58,10 +58,10 @@ const AppSidebar = ({ loggedUser, notes, handleLogout, handleSelectedNote }: { l
                     >
                       <a href={"#"}>
                         <div style={{ display: "flex", flexDirection: "column" }}>
-                          {n.content.length > 30 ? (
-                            <span>{n.content.slice(0, 30) + "..."}</span>
+                          {getTextFromHtml(n.content).length > 27 ? (
+                            <span>{getTextFromHtml(n.content).slice(0, 27) + "..."}</span>
                           ): (
-                            <span>{n.content}</span>
+                            <span>{getTextFromHtml(n.content)}</span>
                           )}
                           <span style={{ fontSize: "0.67em" }}>{n.updatedAt}</span>
                         </div>
