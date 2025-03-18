@@ -51,7 +51,7 @@ const Editor = ({ note, noteState, handleNotePut }: { note: Note, noteState: Not
         editor.off('update');
       };
     }
-  }, [editor, note, handleNotePut])
+  }, [editor, note, handleNotePut, dispatch, noteState])
 
   return (
       <div style={{
