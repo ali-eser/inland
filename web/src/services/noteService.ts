@@ -25,12 +25,9 @@ const updateNote = async (note: Note) => {
       body: JSON.stringify(note)
     });
 
-    console.log(response)
-
-
-      const data = await response.json();
-      console.log(data);
-      return data;
+    const data = await response.json();
+    console.log(data);
+    return data;
 
   } catch(error) {
     console.error(error);
