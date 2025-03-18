@@ -54,24 +54,24 @@ const Editor = ({ note, noteState, handleNotePut }: { note: Note, noteState: Not
   }, [editor, note, handleNotePut, dispatch, noteState])
 
   return (
-      <div style={{
-        display: 'flex',
-        paddingLeft: '4rem',
-        paddingRight: '4rem',
-        width: '100%',
-        flexDirection: 'column',
-        justifyContent: 'flex-start',
-        alignItems: 'center',
-        overflow: 'hidden',
-      }}>
-        <p
-          style={{ fontSize: "0.77em" }}
-          className="text-muted-foreground font-semibold"
-        >
-          {note.updatedAt}
-        </p>
-        <EditorContent spellCheck="false" className="editor-content" style={{ wordBreak: "break-word" }} editor={editor} />
-      </div>
+    <div style={{
+      display: 'flex',
+      paddingLeft: '4rem',
+      paddingRight: '4rem',
+      width: '100%',
+      flexDirection: 'column',
+      justifyContent: 'flex-start',
+      alignItems: 'center',
+      overflow: 'hidden',
+    }}>
+      <p
+        style={{ fontSize: "0.77em" }}
+        className="text-muted-foreground font-semibold"
+      >
+        {note.updatedAt}
+      </p>
+      <EditorContent spellCheck="false" className="editor-content" style={{ wordBreak: "break-word" }} editor={editor} />
+    </div>
   )
 };
 
