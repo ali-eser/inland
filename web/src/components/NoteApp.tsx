@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router";
 import AppSidebar from "./layout/AppSidebar";
 import Editor from "./layout/Editor";
-import NoteTabs from "./layout/NoteTabs";
+// import NoteTabs from "./layout/NoteTabs";
 
 import noteService from "@/services/noteService";
 import { useSelector, useDispatch  } from "react-redux";
@@ -15,7 +15,7 @@ const NoteApp = () => {
   const dispatch = useDispatch();
   const [selectedNote, setSelectedNote] = useState<Note | Record<string, never>>({});
   const [activeNotes, setActiveNotes] = useState<Note[]>([]);
-  const [activeTab, setActiveTab] = useState("defaultnewtab");
+  // const [activeTab, setActiveTab] = useState("defaultnewtab");
   const noteState: Note[] = useSelector(({ notes }: { notes: Note[] }): Note[] => notes);
   const loggedUser = window.localStorage.getItem("loggedUser");
   const loggedUserID = window.localStorage.getItem("loggedUserID");
@@ -32,7 +32,7 @@ const NoteApp = () => {
     if (!alreadyActive) {
       setActiveNotes([...activeNotes, n]);
     }
-    setActiveTab(n.id.toString());
+    //setActiveTab(n.id.toString());
   }
 
   const handleNotePut =  async (n: Note) => {
