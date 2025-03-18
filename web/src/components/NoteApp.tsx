@@ -36,8 +36,7 @@ const NoteApp = () => {
   }
 
   const handleNotePut =  async (n: Note) => {
-    const response = await noteService.updateNote(n);
-    console.log(response);
+    await noteService.updateNote(n);
   }
 
   useEffect(() => {
@@ -71,6 +70,7 @@ const NoteApp = () => {
         </div>*/}
             <Editor
               note={selectedNote}
+              noteState={noteState}
               handleNotePut={handleNotePut} 
             />
       </div>
