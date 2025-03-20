@@ -15,10 +15,10 @@ const NoteApp = () => {
   const dispatch = useDispatch();
   const [selectedNote, setSelectedNote] = useState<Note | Record<string, never>>({});
   const [activeNotes, setActiveNotes] = useState<Note[]>([]);
-  // const [activeTab, setActiveTab] = useState("defaultnewtab");
   const noteState: Note[] = useSelector(({ notes }: { notes: Note[] }): Note[] => notes);
-  const loggedUser = window.localStorage.getItem("loggedUser");
-  const loggedUserID = window.localStorage.getItem("loggedUserID");
+  const loggedUser: string | null = window.localStorage.getItem("loggedUser");
+  const loggedUserID: string | null = window.localStorage.getItem("loggedUserID");
+  // const [activeTab, setActiveTab] = useState("defaultnewtab");
 
   const handleLogout = (): void => {
     window.localStorage.clear();
