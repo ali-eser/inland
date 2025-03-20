@@ -23,13 +23,12 @@ const Editor = ({ note, noteState, handleNotePut }: { note: Note, noteState: Not
 
   useEffect(() => {
     if (editor && note) {
-      editor.commands.setContent(note.content)
+      editor.commands.setContent(note.content);
     }
   }, [editor, note]);
 
   useEffect(() => {
     if (editor) {
-
       editor.on('update', ({ editor }) => {
         const now = new Date;
         const updatedNote: Note = {
@@ -46,12 +45,11 @@ const Editor = ({ note, noteState, handleNotePut }: { note: Note, noteState: Not
         handleNotePut(updatedNote);
       });
 
-
       return () => {
         editor.off('update');
       };
     }
-  }, [editor, note, handleNotePut, dispatch, noteState])
+  }, [editor, note, handleNotePut, dispatch, noteState]);
 
   return (
     <div style={{
