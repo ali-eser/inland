@@ -1,9 +1,24 @@
 import Note from "../models/note";
 import { NotFoundError } from "../../exceptions/NotFoundError";
+import { redisClient } from "../redis/redisClient";
 
 const fetchNotesByUser = async (userId: number) => {
   try {
-    const notes: Note[] | null = await Note.findAll({ where: { userId: userId } })
+    const redisKey = `user:${userId}:notes`;
+    const cachedNotes = await redisClient.get(redisKey);
+
+    if (cachedNotes !== null) {
+      console.log("Cache hit!: ", cachedNotes);
+      return JSON.parse(cachedNotes);
+    }
+
+    console.log("Cache miss, fetching from database");
+    const notes: Note[] | null = await Note.findAll({ where: { userId: userId } });
+
+    if (notes && notes.length > 0) {
+      await redisClient.setex(redisKey, 3600, JSON.stringify(notes));
+      console.log("Notes cached in Redis");
+    }
     return notes;
   } catch (error) {
     console.error("Error: ", error);
