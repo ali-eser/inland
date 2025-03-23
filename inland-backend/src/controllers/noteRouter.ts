@@ -1,6 +1,7 @@
 import noteService from "../services/noteService";
 import express from "express";
 import { NotFoundError } from "../../exceptions/NotFoundError";
+import { redisClient } from "../redis/redisClient";
 
 const noteRouter = express.Router();
 
@@ -11,6 +12,7 @@ noteRouter.get("/:id", async (req, res) => {
       res.status(400).json({ error: "Invalid user ID. ID must be an integer" });
       return;
     }
+
     const notes = await noteService.fetchNotesByUser(id);
     res.status(201).json({ notes: notes });
     return;
