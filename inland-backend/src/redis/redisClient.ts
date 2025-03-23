@@ -4,7 +4,7 @@ import { REDIS_URL, REDIS_PORT } from "../utils/config";
 const port: number = REDIS_PORT ? parseInt(REDIS_PORT) : 6379;
 const url: string = REDIS_URL ? REDIS_URL : "127.0.0.1";
 
-const redisClient = new Redis(port, url);
+export const redisClient = new Redis(port, url);
 
 export const connectToRedis =  async () => {
   try {
