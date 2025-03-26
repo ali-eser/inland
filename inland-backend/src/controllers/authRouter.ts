@@ -10,8 +10,8 @@ authRouter.get("/status", async (req, res) => {
     return;
   }
   try {
-    const decoded = authService.authStatus(accessToken);
-    res.status(201).json({ user: accessToken.username, id: accessToken.id });
+    const decoded = await authService.authStatus(accessToken);
+    res.status(200).json({ user: decoded.username, id: decoded.id });
     return;
   } catch (error: any) {
     res.status(401).json({ error: error.message });
@@ -35,10 +35,12 @@ authRouter.post("/refresh" , async (req, res) => {
       sameSite: "strict",
       maxAge: 60 * 60 * 1000
     });
+
+    res.status(200).json({ message: "Access token refreshed" });
     return;
   } catch (error: any) {
-    console.error(error, error.message);
-    throw error;
+    res.status(401).json({ error: error.message });
+    return;
   }
 });
 
