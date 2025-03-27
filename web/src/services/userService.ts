@@ -1,7 +1,6 @@
 const baseURL = import.meta.env.VITE_BASE_URL;
 
 const login = async (data: object) => {
-  console.log("baseurl: ", baseURL);
   const response = await fetch(`${baseURL}/api/login`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
