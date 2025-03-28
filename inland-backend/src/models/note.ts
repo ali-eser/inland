@@ -18,7 +18,7 @@ class Note extends Model {
     type: DataType.TEXT,
     unique: false
   })
-  content!: string;
+  encryptedContent!: string;
 
   @Column({
     type: DataType.STRING,
