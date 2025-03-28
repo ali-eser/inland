@@ -2,6 +2,75 @@ export const generateSalt = async () => {
   return crypto.getRandomValues(new Uint8Array(16)).buffer;
 }
 
+export const generateMasterKey = async (): Promise<CryptoKey> => {
+  try {
+    const key = await crypto.subtle.generateKey(
+      {
+        name: 'AES-GCM',
+        length: 256
+      },
+      true,
+      ['encrypt', 'decrypt']
+    );
+    return key;
+  } catch (error) {
+    console.error('Failed to generate master key', error);
+    throw new Error(`Failed to generate master key: ${error}`);
+  }
+}
+
+export const encryptMasterKey = async (masterKey: CryptoKey, derivedKey: CryptoKey) => {
+  const exportedMasterKey = await crypto.subtle.exportKey('raw', masterKey);
+  const iv = crypto.getRandomValues(new Uint8Array(16));
+  const encryptedMasterKey = await crypto.subtle.encrypt(
+    {
+      name: 'AES-GCM',
+      iv: iv
+    },
+    derivedKey,
+    exportedMasterKey,
+  );
+
+  const encryptedMasterData = new Uint8Array(
+    iv.byteLength + encryptedMasterKey.byteLength
+  );
+
+  encryptedMasterData.set(iv, 0);
+  encryptedMasterData.set(new Uint8Array(encryptedMasterKey), iv.byteLength);
+
+  return window.btoa(String.fromCharCode.apply(null, Array.from(encryptedMasterData)));
+}
+
+export const decryptMasterKey = async (stringifiedMasterKey: string, derivedKey: CryptoKey) => {
+  const binaryString = window.atob(stringifiedMasterKey);
+  const encryptedData = new Uint8Array(binaryString.length);
+  for (let i = 0; i < binaryString.length; i++) {
+    encryptedData[i] = binaryString.charCodeAt(i);
+  }
+
+  const iv = encryptedData.slice(0, 16);
+  const encryptedKey = encryptedData.slice(16);
+
+  const decryptedMasterKey = await crypto.subtle.decrypt(
+    {
+      name: 'AES-GCM',
+      iv: iv
+    },
+    derivedKey,
+    encryptedKey
+  );
+
+  console.log("decryptedMasterKey: ", decryptedMasterKey);
+
+  return await crypto.subtle.importKey(
+    'raw',
+    decryptedMasterKey,
+    { name: 'AES-GCM', length: 256 },
+    true,
+    ['encrypt', 'decrypt']
+  );
+}
+
 export const deriveKeyFromPass = async (pass: string, salt: ArrayBuffer, iterations: number = 100000) => {
   const textEncoder = new TextEncoder();
   const keyMaterial = await crypto.subtle.importKey(
@@ -15,9 +84,9 @@ export const deriveKeyFromPass = async (pass: string, salt: ArrayBuffer, iterati
   return await crypto.subtle.deriveKey(
     {
       name: 'PBKDF2',
-      salt: salt,
-      iterations: iterations,
-      hash: 'SHA_256'
+      salt,
+      iterations,
+      hash: 'SHA-256'
     },
     keyMaterial,
     { name: 'AES-GCM', length: 256 },
