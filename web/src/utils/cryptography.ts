@@ -1,3 +1,5 @@
+import { base64toArrayBuffer } from "./utils";
+
 export const generateSalt = async () => {
   return crypto.getRandomValues(new Uint8Array(16)).buffer;
 }
@@ -41,12 +43,8 @@ export const encryptMasterKey = async (masterKey: CryptoKey, derivedKey: CryptoK
   return window.btoa(String.fromCharCode.apply(null, Array.from(encryptedMasterData)));
 }
 
-export const decryptMasterKey = async (stringifiedMasterKey: string, derivedKey: CryptoKey) => {
-  const binaryString = window.atob(stringifiedMasterKey);
-  const encryptedData = new Uint8Array(binaryString.length);
-  for (let i = 0; i < binaryString.length; i++) {
-    encryptedData[i] = binaryString.charCodeAt(i);
-  }
+export const decryptMasterKey = async (base64MasterKey: string, derivedKey: CryptoKey) => {
+  const encryptedData = base64toArrayBuffer(base64MasterKey);
 
   const iv = encryptedData.slice(0, 16);
   const encryptedKey = encryptedData.slice(16);
@@ -60,8 +58,6 @@ export const decryptMasterKey = async (stringifiedMasterKey: string, derivedKey:
     encryptedKey
   );
 
-  console.log("decryptedMasterKey: ", decryptedMasterKey);
-
   return await crypto.subtle.importKey(
     'raw',
     decryptedMasterKey,
@@ -71,7 +67,7 @@ export const decryptMasterKey = async (stringifiedMasterKey: string, derivedKey:
   );
 }
 
-export const deriveKeyFromPass = async (pass: string, salt: ArrayBuffer, iterations: number = 100000) => {
+export const deriveKeyFromPass = async (pass: string, salt: string, iterations: number = 100000) => {
   const textEncoder = new TextEncoder();
   const keyMaterial = await crypto.subtle.importKey(
     'raw',
@@ -84,7 +80,7 @@ export const deriveKeyFromPass = async (pass: string, salt: ArrayBuffer, iterati
   return await crypto.subtle.deriveKey(
     {
       name: 'PBKDF2',
-      salt,
+      salt: base64toArrayBuffer(salt),
       iterations,
       hash: 'SHA-256'
     },
@@ -115,9 +111,11 @@ export const encryptText = async (text: string, key: CryptoKey) => {
   return encryptedData.buffer;
 }
 
-export const decryptText = async (encryptedData: ArrayBuffer, key: CryptoKey) => {
-  const iv = encryptedData.slice(0, 16);
-  const ciphertext = encryptedData.slice(16);
+export const decryptText = async (encryptedData: string, key: CryptoKey) => {
+  const encryptedBuffer = base64toArrayBuffer(encryptedData);
+
+  const iv: ArrayBuffer = encryptedBuffer.slice(0, 16);
+  const ciphertext: ArrayBuffer = encryptedBuffer.slice(16);
 
   const decrypted = await crypto.subtle.decrypt(
     {
@@ -127,22 +125,22 @@ export const decryptText = async (encryptedData: ArrayBuffer, key: CryptoKey) =>
     key,
     ciphertext
   );
+
   const textDecoder = new TextDecoder();
   return textDecoder.decode(decrypted);
 }
 
 export const verifyEncryptionPassword = async (
   password: string,
-  encryptedTestString: ArrayBuffer,
-  salt: ArrayBuffer,
-  originalTestString: string
+  base64MasterKey: string,
+  salt: string
 ) => {
   try {
     const derivedKey: CryptoKey = await deriveKeyFromPass(password, salt);
-    const decrypted: string = await decryptText(encryptedTestString, derivedKey);
-    return decrypted === originalTestString;
+    await decryptMasterKey(base64MasterKey, derivedKey);
+    return true;
   } catch (error) {
     console.error(error);
-    throw error;
+    return false;
   }
 }
