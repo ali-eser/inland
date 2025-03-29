@@ -34,6 +34,36 @@ class User extends Model {
   })
   passwordHash!: string;
 
+  @Column({
+    type: DataType.STRING,
+    allowNull: false
+  })
+  encryptedMasterKey!: string;
+
+  @Column({
+    type: DataType.STRING(64),
+    allowNull: false
+  })
+  keyDerivationSalt!: string;
+
+  @Column({
+    type: DataType.ENUM('active', 'suspended', 'deleted'),
+    defaultValue: 'active'
+  })
+  status!: string;
+
+  @Column({
+    type: DataType.DATE,
+    allowNull: true
+  })
+  lastLoginAt?: Date;
+
+  @Column({
+    type: DataType.INTEGER,
+    defaultValue: 0
+  })
+  failedLoginAttempts!: number;
+
   @HasMany(() => Note)
   notes!: Note[];
 }
