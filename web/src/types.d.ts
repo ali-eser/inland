@@ -3,6 +3,14 @@ export interface User {
   user: string
 }
 
+export interface NewUser {
+  username: string,
+  password: string,
+  email: string,
+  keyDerivationSalt: string,
+  encryptedMasterKey: string
+}
+
 export type UserState = User | null;
 
 export interface Note {
