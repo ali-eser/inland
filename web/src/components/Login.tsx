@@ -4,7 +4,15 @@ import { useForm } from "react-hook-form"
 import { useDispatch, useSelector } from "react-redux"
 import userService from "@/services/userService"
 import { setUser } from "@/reducers/userReducer"
-import { User, UserState } from "@/types"
+import { User, UserState, NewUser } from "@/types"
+import { arrayBufferToBase64 } from "@/utils/utils"
+import {
+  generateSalt,
+  deriveKeyFromPass,
+  generateMasterKey,
+  encryptMasterKey,
+  verifyEncryptionPassword
+} from "@/utils/cryptography"
 
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -33,7 +41,7 @@ const SignUpSchema = z.object({
   }),
   passwordConf: z.string()
 }).refine((data) => data.password === data.passwordConf, {
-  message: "Passwords do not match",
+  message: "Passwords do not match!",
   path: ["passwordConf"]
 });
 
@@ -72,20 +80,39 @@ const Login = () => {
     },
   })
 
-  const handleSignUp = async (data: object) => {
-    console.log(data);
-    const response: object = await userService.signUp(data);
-    if (Object.hasOwn(response,'error')) {
+  const handleSignUp = async (data: z.infer<typeof SignUpSchema>) => {
+    const salt = await generateSalt();
+    const derivedKey: CryptoKey = await deriveKeyFromPass(data.password, arrayBufferToBase64(salt));
+    const masterKey: CryptoKey = await generateMasterKey();
+    const encryptedMasterKey: string = await encryptMasterKey(masterKey, derivedKey);
+    console.log(await verifyEncryptionPassword(
+      data.password,
+      encryptedMasterKey,
+      arrayBufferToBase64(salt)
+    ));
+
+    const userToSignUp: NewUser = {
+      username: data.username,
+      password: data.password,
+      email: data.email,
+      keyDerivationSalt: arrayBufferToBase64(salt),
+      encryptedMasterKey: encryptedMasterKey
+    }
+
+    console.log(userToSignUp);
+
+    //const response: object = await userService.signUp(userToSignUp);
+    /*if (Object.hasOwn(response,'error')) {
       setIsError(true);
       setErrorMsg((response as { error: string }).error);
       setTimeout(() => {
         setIsError(false);
         setErrorMsg("")
       }, 5000);
-    }
+    }*/
   }
 
-  const handleLogin = async (data: object) => {
+  const handleLogin = async (data: z.infer<typeof LoginSchema>) => {
     const response = await userService.login(data);
     if ('user' in response && 'id' in response) {
       const userToLogin: User = { user: response.user as string, id: response.id as number }
@@ -218,7 +245,6 @@ const Login = () => {
       </section>
       </div>
     </>
-
   )
 }
 
