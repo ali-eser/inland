@@ -9,11 +9,13 @@ import './index.css'
 import App from './App.tsx'
 import userSlice from './reducers/userReducer.ts'
 import noteSlice from './reducers/noteReducer.ts'
+import notificationSlice from './reducers/notificationReducer.ts'
 
 const store = configureStore({
   reducer: {
     user: userSlice,
-    notes: noteSlice
+    notes: noteSlice,
+    notification: notificationSlice
   }
 });
 
