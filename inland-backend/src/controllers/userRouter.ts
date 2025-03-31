@@ -27,13 +27,27 @@ userRouter.get("/:id", async (req, res) => {
 
 userRouter.post("/", async (req, res) => {
   try {
-    const { username, email, password, passwordConf } = req.body;
+    const {
+      username,
+      email,
+      password,
+      passwordConf,
+      keyDerivationSalt,
+      encryptedMasterKey
+    } = req.body;
 
     if (username.length >= 15) {
       res.status(400).json({error: "Username cannot be longer than 15 characters"});
       return;
     }
-    const userToAdd = await userService.addUser(username, email, password, passwordConf);
+    const userToAdd = await userService.addUser(
+      username,
+      email,
+      password,
+      passwordConf,
+      keyDerivationSalt,
+      encryptedMasterKey
+    );
     res.status(201).json(userToAdd);
     return;
   } catch (error: any) {
