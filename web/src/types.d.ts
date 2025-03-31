@@ -6,6 +6,7 @@ export interface User {
 export interface NewUser {
   username: string,
   password: string,
+  passwordConf: string,
   email: string,
   keyDerivationSalt: string,
   encryptedMasterKey: string
@@ -21,3 +22,11 @@ export interface Note {
   createdAt: string,
   updatedAt: string
 }
+
+export interface Notification {
+  type: "default" | "destructive" | null | undefined,
+  title: string,
+  description: string
+}
+
+export type NotificationState = Notification | null;
