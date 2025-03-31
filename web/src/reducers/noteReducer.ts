@@ -8,7 +8,7 @@ const noteSlice = createSlice({
   initialState,
   reducers: {
     setNotes(_state, action: PayloadAction<Note[]>): Note[] {
-      return action.payload
+      return action.payload;
     }
   }
 });
