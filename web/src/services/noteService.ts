@@ -10,10 +10,11 @@ const fetchNotes = async (id: number) => {
 
     if (response.ok) {
       const data = await response.json();
-      return data;
+      return data.notes;
     }
   } catch (err) {
     console.error(err);
+    return [];
   }
 }
 
