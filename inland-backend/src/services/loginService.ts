@@ -30,7 +30,15 @@ const login = async (username: string, password: string) => {
       expiresIn: "7d"
     });
 
-    return { accessToken, refreshToken, user: username, id: user.id };
+    return {
+      accessToken,
+      refreshToken,
+      user: username,
+      id: user.id,
+      encryptedMasterKey: user.encryptedMasterKey,
+      keyDerivationSalt: user.keyDerivationSalt,
+      status: user.status
+    };
   } catch (error) {
     console.error(error);
     throw error;
