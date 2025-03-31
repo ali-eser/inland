@@ -23,7 +23,13 @@ loginRouter.post("/", async (req, res) => {
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
-    res.status(200).json({ message: "Logged in successfully", user: user.user, id: user.id });
+    res.status(200).json({
+      user: user.user,
+      id: user.id,
+      encryptedMasterKey: user.encryptedMasterKey,
+      keyDerivationSalt: user.keyDerivationSalt,
+      status: user.status
+    });
     return;
   } catch (error: any) {
     if (error instanceof AuthenticationError) {
