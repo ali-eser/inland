@@ -47,8 +47,8 @@ const NoteApp = () => {
 
     const getNotes = async () => {
       try {
-        const response = await noteService.fetchNotes(parseInt(loggedUserID as string));
-        dispatch(setNotes(response.notes));
+        const response: Note[] = await noteService.fetchNotes(parseInt(loggedUserID as string));
+        dispatch(setNotes(response));
       } catch (err) {
         console.error(err);
       }
