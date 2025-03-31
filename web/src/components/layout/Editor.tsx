@@ -8,7 +8,7 @@ import { Note } from "@/types";
 
 const extensions = [StarterKit, Typography]
 
-const Editor = ({ note, noteState, handleNotePut }: { note: Note, noteState: Note[], handleNotePut: (n: Note) => void }) => {
+const Editor = ({ note, noteState, handleNotePut }: { note: Note | Record<string, never>, noteState: Note[], handleNotePut: (n: Note) => void }) => {
   const dispatch = useDispatch();
 
   const editor = useEditor({
