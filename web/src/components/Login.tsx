@@ -69,7 +69,7 @@ const Login = () => {
       email: "",
       password: "",
       passwordConf: ""
-    },
+    }
   })
 
   const loginForm = useForm<z.infer<typeof SignUpSchema>>({
@@ -94,22 +94,21 @@ const Login = () => {
     const userToSignUp: NewUser = {
       username: data.username,
       password: data.password,
+      passwordConf: data.passwordConf,
       email: data.email,
       keyDerivationSalt: arrayBufferToBase64(salt),
       encryptedMasterKey: encryptedMasterKey
     }
 
-    console.log(userToSignUp);
-
-    //const response: object = await userService.signUp(userToSignUp);
-    /*if (Object.hasOwn(response,'error')) {
+    const response: object = await userService.signUp(userToSignUp);
+    if (Object.hasOwn(response,'error')) {
       setIsError(true);
       setErrorMsg((response as { error: string }).error);
       setTimeout(() => {
         setIsError(false);
         setErrorMsg("")
       }, 5000);
-    }*/
+    }
   }
 
   const handleLogin = async (data: z.infer<typeof LoginSchema>) => {
