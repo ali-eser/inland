@@ -4,19 +4,11 @@ import { useForm } from "react-hook-form"
 import { useDispatch, useSelector } from "react-redux"
 import userService from "@/services/userService"
 import { setUser } from "@/reducers/userReducer"
-import { User, UserState, NewUser } from "@/types"
-import { arrayBufferToBase64 } from "@/utils/utils"
-import {
-  generateSalt,
-  deriveKeyFromPass,
-  generateMasterKey,
-  encryptMasterKey,
-  verifyEncryptionPassword
-} from "@/utils/cryptography"
+import { User, UserState } from "@/types"
+import { setNotification } from "@/reducers/notificationReducer"
 
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import {
@@ -55,8 +47,6 @@ const Login = () => {
   const navigate = useNavigate();
   const userRedux: UserState = useSelector(({ user }: { user: User }): User => user);
   const [isSignUp, setIsSignUp] = useState(false);
-  const [isError, setIsError] = useState(false);
-  const [errorMsg, setErrorMsg] = useState("");
 
   useEffect(() => {
     console.log("user logged in: ", userRedux);
@@ -80,33 +70,22 @@ const Login = () => {
     },
   })
 
-  const handleSignUp = async (data: z.infer<typeof SignUpSchema>) => {
-    const salt = await generateSalt();
-    const derivedKey: CryptoKey = await deriveKeyFromPass(data.password, arrayBufferToBase64(salt));
-    const masterKey: CryptoKey = await generateMasterKey();
-    const encryptedMasterKey: string = await encryptMasterKey(masterKey, derivedKey);
-    console.log(await verifyEncryptionPassword(
-      data.password,
-      encryptedMasterKey,
-      arrayBufferToBase64(salt)
-    ));
-
-    const userToSignUp: NewUser = {
-      username: data.username,
-      password: data.password,
-      passwordConf: data.passwordConf,
-      email: data.email,
-      keyDerivationSalt: arrayBufferToBase64(salt),
-      encryptedMasterKey: encryptedMasterKey
+  const handleSignUp = async (userData: z.infer<typeof SignUpSchema>) => {
+    const response: object = await userService.signUp(userData);
+    if ('username' in response) {
+      await (userService.login({
+        username: userData.username,
+        password: userData.password
+      }));
     }
-
-    const response: object = await userService.signUp(userToSignUp);
-    if (Object.hasOwn(response,'error')) {
-      setIsError(true);
-      setErrorMsg((response as { error: string }).error);
+    if ('error' in response) {
+      dispatch(setNotification({
+        type: 'destructive',
+        title: 'Error',
+        description: response.error as string
+      }));
       setTimeout(() => {
-        setIsError(false);
-        setErrorMsg("")
+        dispatch(setNotification(null));
       }, 5000);
     }
   }
@@ -114,31 +93,37 @@ const Login = () => {
   const handleLogin = async (data: z.infer<typeof LoginSchema>) => {
     const response = await userService.login(data);
     if ('user' in response && 'id' in response) {
-      const userToLogin: User = { user: response.user as string, id: response.id as number }
+      const userToLogin: User = { user: response.user as string, id: response.id as number };
+
       window.localStorage.setItem("loggedUser", userToLogin.user);
       window.localStorage.setItem("loggedUserID", (userToLogin.id).toString());
+
       dispatch(setUser(userToLogin));
+
       navigate('/');
-    } else if ('error' in response) {
-      setIsError(true);
-      setErrorMsg((response as { error: string }).error);
+
+      dispatch(setNotification({
+        type: 'default',
+        title: 'Success',
+        description: `Logged in as ${response.user}`
+      }));
       setTimeout(() => {
-        setIsError(false);
-        setErrorMsg("")
+        dispatch(setNotification(null));
+      }, 5000);
+    } else if ('error' in response) {
+      dispatch(setNotification({
+        type: 'destructive',
+        title: 'Error',
+        description: response.error
+      }));
+      setTimeout(() => {
+        dispatch(setNotification(null));
       }, 5000);
     }
   }
 
   return (
     <>
-      {isError && (
-        <Alert variant="destructive" className="alert">
-          <AlertTitle>Error!</AlertTitle>
-          <AlertDescription>
-            {errorMsg}
-          </AlertDescription>
-        </Alert>
-      )}
       <div style={{ display: "flex" }}>
       <div id="user-screen">
         <h1 id="splash">inland.</h1>
