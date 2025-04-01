@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form"
 import { useDispatch, useSelector } from "react-redux"
 import userService from "@/services/userService"
 import { setUser } from "@/reducers/userReducer"
-import { User, UserState } from "@/types"
+import { User } from "@/types"
 import { setNotification } from "@/reducers/notificationReducer"
 
 import { z } from "zod"
@@ -45,7 +45,7 @@ const LoginSchema = z.object({
 const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const userRedux: UserState = useSelector(({ user }: { user: User }): User => user);
+  const userRedux = useSelector(({ user }: { user: User }): User => user);
   const [isSignUp, setIsSignUp] = useState(false);
 
   useEffect(() => {
