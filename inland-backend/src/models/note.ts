@@ -20,13 +20,6 @@ class Note extends Model {
   })
   encryptedContent!: string;
 
-  @Column({
-    type: DataType.STRING,
-    unique: false,
-    allowNull: true
-  })
-  title!: string;
-
   @ForeignKey(() => User)
 
   @Column(DataType.INTEGER)
