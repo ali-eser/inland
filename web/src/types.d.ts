@@ -7,9 +7,7 @@ export interface NewUser {
   username: string,
   password: string,
   passwordConf: string,
-  email: string,
-  keyDerivationSalt: string,
-  encryptedMasterKey: string
+  email: string
 }
 
 export type UserState = User | null;
