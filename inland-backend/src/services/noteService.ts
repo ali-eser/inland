@@ -7,7 +7,7 @@ const fetchAllFromCache = async (userId: number) => {
     const noteIdsKey = `user:${userId}:noteIds`;
     const noteIds = await redisClient.smembers(noteIdsKey);
 
-    if (noteIdsKey.length === 0) {
+    if (noteIds.length === 0) {
       return;
     }
 
