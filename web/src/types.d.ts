@@ -10,11 +10,8 @@ export interface NewUser {
   email: string
 }
 
-export type UserState = User | null;
-
 export interface Note {
   id: number,
-  title?: string,
   content: string,
   userId: number,
   createdAt: string,
@@ -27,4 +24,3 @@ export interface Notification {
   description: string
 }
 
-export type NotificationState = Notification | null;
