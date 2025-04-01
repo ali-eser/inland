@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { Notification } from "@/types";
 
 type NotificationState = Notification | null;
 const initialState = null as NotificationState;
