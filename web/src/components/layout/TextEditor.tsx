@@ -1,19 +1,25 @@
-import { useEffect } from "react";
-import { useEditor, EditorContent } from "@tiptap/react"
-import { useDispatch } from "react-redux";
-import { setNotes } from "@/reducers/noteReducer";
+import { useEffect, useRef } from "react";
+import { useEditor, EditorContent, Editor } from "@tiptap/react"
 import StarterKit from "@tiptap/starter-kit"
 import Typography from "@tiptap/extension-typography"
 import { Note } from "@/types";
 
-const extensions = [StarterKit, Typography]
+const extensions = [
+  StarterKit,
+  Typography
+];
 
-const Editor = ({ note, noteState, handleNotePut }: { note: Note | Record<string, never>, noteState: Note[], handleNotePut: (n: Note) => void }) => {
-  const dispatch = useDispatch();
+const TextEditor = ({
+  note,
+  handleNotePut
+}: {
+  note: Note | Record<string, never>,
+  handleNotePut: (updatedNote: Note) => void }) => {
 
+  const currentNoteIdRef = useRef<number | null>(null);
   const editor = useEditor({
     extensions,
-    content: note.content,
+    content: '',
     editorProps: {
       attributes: {
         class: 'prose prose-sm sm:prose-base lg:prose-lg xl:prose-2xl focus:outline-none',
@@ -23,13 +29,14 @@ const Editor = ({ note, noteState, handleNotePut }: { note: Note | Record<string
 
   useEffect(() => {
     if (editor && note) {
-      editor.commands.setContent(note.content);
+      editor.commands.setContent(note.content || '', false);
+      currentNoteIdRef.current = note.id;
     }
   }, [editor, note]);
 
   useEffect(() => {
     if (editor) {
-      editor.on('update', ({ editor }) => {
+      editor.on('update', ({ editor }: { editor: Editor }) => {
         const now = new Date;
         const updatedNote: Note = {
           id: note.id,
@@ -39,10 +46,6 @@ const Editor = ({ note, noteState, handleNotePut }: { note: Note | Record<string
           content: editor.getHTML()
         };
 
-        const updatedNoteState: Note[] = noteState.map((existingNote) =>
-          existingNote.id === note.id ? updatedNote : existingNote
-        );
-        dispatch(setNotes(updatedNoteState));
         handleNotePut(updatedNote);
       });
 
@@ -50,7 +53,11 @@ const Editor = ({ note, noteState, handleNotePut }: { note: Note | Record<string
         editor.off('update');
       };
     }
-  }, [editor, note, handleNotePut, dispatch, noteState]);
+  }, [editor, note, handleNotePut]);
+
+  if (!editor) {
+    return null;
+  }
 
   return (
     <div style={{
@@ -69,9 +76,9 @@ const Editor = ({ note, noteState, handleNotePut }: { note: Note | Record<string
       >
         {note.updatedAt}
       </p>
-      <EditorContent spellCheck="false" className="editor-content" style={{ wordBreak: "break-word" }} editor={editor} />
+      <EditorContent autoFocus spellCheck="false" className="editor-content" style={{ wordBreak: "break-word" }} editor={editor} />
     </div>
   )
 };
 
-export default Editor;
+export default TextEditor;
