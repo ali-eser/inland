@@ -1,4 +1,6 @@
-import { Note } from "@/types";
+import { Note, NewNote } from "@/types";
+import keyManager from "@/utils/keyManager";
+import { encryptText } from "@/utils/cryptography";
 
 const baseURL = import.meta.env.VITE_BASE_URL;
 
@@ -15,6 +17,33 @@ const fetchNotes = async (id: number) => {
   } catch (err) {
     console.error(err);
     return [];
+  }
+}
+
+const createNote = async (note: NewNote) => {
+  try {
+    const masterKey = keyManager.getMasterKey();
+
+    if (masterKey) {
+      const encryptedNote = await encryptText(note.content, masterKey);
+      console.log(encryptedNote);
+    }
+
+    const response = await fetch(`${baseURL}/api/note`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(note)
+    });
+
+    if (!response.ok) {
+      const errorJson = await response.json();
+      return { error: errorJson.error || "An unspecified error occurred while creating a new note" };
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+    return { error: error.message || 'An error occurred while creating a note' }
   }
 }
 
@@ -36,4 +65,4 @@ const updateNote = async (note: Note) => {
   }
 }
 
-export default { fetchNotes, updateNote };
+export default { fetchNotes, updateNote, createNote };
