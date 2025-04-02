@@ -1,12 +1,23 @@
 import { Routes, Route } from "react-router"
+import { useSelector } from "react-redux"
 import Login from "@/components/Login"
 import NoteApp from "@/components/NoteApp"
-import { NotificationState } from "./types"
+import { Notification } from "./types"
+import keyManager from "./utils/keyManager"
+
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { useSelector } from "react-redux"
+import { useEffect } from "react"
 
 const App = () => {
-  const notification = useSelector(({ notification }: { notification: NotificationState }): NotificationState => notification);
+  const notification = useSelector(({ notification }: { notification: Notification | null }) => notification);
+
+  useEffect(() => {
+    console.log("key: ",keyManager.getMasterKey())
+    if (!keyManager.getMasterKey()) {
+      console.log("no key")
+    }
+  }, []);
+
   return (
     <>
       {notification && (
