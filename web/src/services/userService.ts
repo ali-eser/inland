@@ -7,18 +7,35 @@ import {
   deriveKeyFromPass,
   generateMasterKey,
   encryptMasterKey,
+  decryptMasterKey,
   verifyEncryptionPassword
 } from "@/utils/cryptography"
 
-const login = async (data: object) => {
-  const response = await fetch(`${baseURL}/api/login`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data)
-  });
+const login = async (password: string, username: string) => {
+  try {
+    const response = await fetch(`${baseURL}/api/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ password: password, username: username })
+    });
 
-  const jsonRes = await response.json();
-  return jsonRes;
+    if (!response.ok) {
+      const errorJson = await response.json();
+      return { error: errorJson.message || 'Login failed' };
+    }
+
+    const jsonRes = await response.json();
+    const derivedKey: CryptoKey = await deriveKeyFromPass(password, jsonRes.keyDerivationSalt);
+    const masterKey: CryptoKey = await decryptMasterKey(jsonRes.encryptedMasterKey, derivedKey);
+
+    window.localStorage.setItem("loggedUser", jsonRes.user);
+    window.localStorage.setItem("loggedUserID", (jsonRes.id).toString());
+
+    return { user: jsonRes.user, id: jsonRes.id, masterKey: masterKey };
+  } catch (error) {
+    console.error(error);
+    return { error: 'An unexpected error occurred during login' }
+  }
 }
 
 const signUp = async (data: NewUser) => { 
