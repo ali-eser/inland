@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router";
 import AppSidebar from "./layout/AppSidebar";
-import Editor from "./layout/Editor";
+import TextEditor from "./layout/TextEditor";
 // import NoteTabs from "./layout/NoteTabs";
 import keyManager from "@/utils/keyManager";
 import { formatDate } from "@/utils/utils";
@@ -15,6 +15,7 @@ const NoteApp = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [selectedNote, setSelectedNote] = useState<Note | Record<string, never>>({});
+  const [isLoading, setIsLoading] = useState<boolean>(true); 
   // const [activeNotes, setActiveNotes] = useState<Note[]>([]);
   const noteState: Note[] = useSelector(({ notes }: { notes: Note[] }): Note[] => notes);
   const loggedUser: string | null = window.localStorage.getItem("loggedUser");
@@ -62,8 +63,24 @@ const NoteApp = () => {
     setSelectedNote(result);
   }
 
-  const handleNotePut =  async (n: Note) => {
-    await noteService.updateNote(n);
+  const handleNoteDelete = async () => {
+    await noteService.deleteNote(selectedNote.id);
+    const updatedNotesArray = noteState.filter(n => n.id !== selectedNote.id);
+    dispatch(setNotes(updatedNotesArray));
+    setSelectedNote(updatedNotesArray[0]);
+  }
+
+  const handleNotePut =  async (updatedNote: Note) => {
+    await noteService.updateNote(updatedNote);
+
+    const formattedUpdatedNote: Note = {
+      ...updatedNote,
+      createdAt: formatDate(updatedNote.createdAt),
+      updatedAt: formatDate(updatedNote.updatedAt)
+    };
+
+    const updatedNoteState: Note[] = noteState.filter(n => n.id !== updatedNote.id);
+    dispatch(setNotes([formattedUpdatedNote, ...updatedNoteState]));
   }
 
   useEffect(() => {
@@ -88,6 +105,7 @@ const NoteApp = () => {
             updatedAt: formatDate(note.updatedAt)
           }))
         ));
+        setIsLoading(false);
       } catch (err) {
         console.error(err);
       }
@@ -100,17 +118,18 @@ const NoteApp = () => {
         <AppSidebar
           loggedUser={loggedUser}
           notes={noteState}
+          isLoading={isLoading}
           handleLogout={handleLogout}
           handleSelectedNote={handleSelectedNote}
           handleCreateNote={handleCreateNote}
+          handleNoteDelete={handleNoteDelete}
         />
       <div style={{ flex: 1, display: "flex", justifyContent: "center", alignItems: "center" }} >
         {/*<div style={{ whiteSpace: 'nowrap' }}>
           <NoteTabs activeNotes={activeNotes} handleSelectedNote={handleSelectedNote} activeTab={activeTab} />
         </div>*/}
-            <Editor
+            <TextEditor
               note={selectedNote}
-              noteState={noteState}
               handleNotePut={handleNotePut} 
             />
       </div>
