@@ -8,14 +8,20 @@ const fetchAllFromCache = async (userId: number) => {
     const noteIds = await redisClient.smembers(noteIdsKey);
 
     if (noteIds.length === 0) {
-      return;
+      return [];
     }
 
     const noteKeys: string[] = noteIds.map(noteId => `user:${userId}:note:${noteId}`);
-    const cachedNotes = await redisClient.mget(...noteKeys);
 
+    const cachedNotes = await redisClient.mget(...noteKeys);
     const notes = cachedNotes.filter(note => note !== null).map(note => JSON.parse(note));
-    return notes;
+
+    if (notes.length === noteIds.length) {
+      return notes;
+    } else {
+      console.log(`Cache for user ${userId} inconsistent (expected ${noteIds.length}, found ${notes.length})`);
+      return [];
+    }
   } catch (error) {
     console.error("Error fetching notes from cache: ", error);
   }
@@ -25,7 +31,6 @@ const fetchNotesByUser = async (userId: number) => {
   try {
     const cachedNotes = await fetchAllFromCache(userId);
 
-    // console.log(typeof(cachedNotes));
     if (cachedNotes && cachedNotes.length > 0) {
       console.log(`Serving ${cachedNotes.length} notes from Redis for user ${userId}`);
       return cachedNotes;
@@ -62,37 +67,33 @@ const fetchSingleNote = async (id: number ) => {
   }
 };
 
-const createNote = async (userId: number, content: string, title?: string) => {
+const createNote = async (
+  userId: number,
+  content: string,
+  updatedAt: string,
+  createdAt: string
+) => {
   try {
-    if (!userId|| !content) {
-      throw new Error("A note should have a user and content");
+    console.log("userId: ", userId, "content: ", content);
+    if (!userId) {
+      throw new Error("A note should have a user");
     }
-    if (title) {
-      const newNote =  {
-        userId: userId,
-        content: content,
-        title: title
-      }
-      const addedNote =  await Note.create(newNote);
-      const noteKey = `user:${userId}:note:${addedNote.id}`;
-      const noteIdsKey = `user:${userId}:noteIds`;
-
-      await redisClient.setex(noteKey, 3600, JSON.stringify(addedNote));
-      await redisClient.sadd(noteIdsKey, addedNote.id);
-      return addedNote;
-    } else {
-      const newNote =  {
-        userId: userId,
-        content: content
-      }
-      const addedNote =  await Note.create(newNote);
-      const noteKey = `user:${userId}:note:${addedNote.id}`;
-      const noteIdsKey = `user:${userId}:noteIds`;
-
-      await redisClient.setex(noteKey, 3600, JSON.stringify(addedNote));
-      await redisClient.sadd(noteIdsKey, addedNote.id);
-      return addedNote;
+    const newNote =  {
+      userId: userId,
+      content: content,
+      updatedAt: updatedAt,
+      createdAt: createdAt
     }
+    console.log(`Creating note with content: '${content}', length: ${content.length}`);
+    const addedNote =  await Note.create(newNote);
+    console.log(`Created note in DB: ${JSON.stringify(addedNote)}`);
+    const noteKey = `user:${userId}:note:${addedNote.id}`;
+    const noteIdsKey = `user:${userId}:noteIds`;
+
+    await redisClient.setex(noteKey, 3600, JSON.stringify(addedNote));
+    await redisClient.sadd(noteIdsKey, addedNote.id);
+    console.log(`added note with ID ${addedNote.id} to redis`);
+    return addedNote;
   } catch (error) {
     console.log("Error: ", error);
     throw error;
