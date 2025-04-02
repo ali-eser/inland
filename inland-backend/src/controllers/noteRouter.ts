@@ -52,6 +52,7 @@ noteRouter.get("/single/:id", async (req, res) => {
 noteRouter.post("/", async (req, res) => {
   try {
     if (!req.body.userId) {
+      console.error("A user ID must be specified" )
       res.status(400).json({ error: "A user ID must be specified" });
       return;
     }
@@ -60,18 +61,12 @@ noteRouter.post("/", async (req, res) => {
       res.status(400).json({ error: "Invalid user ID. ID must be an integer." });
       return;
     }
-
-    if (req.body.title) {
-      const { title, content } = req.body;
-      const newNote = await noteService.createNote(userId, content, title);
-      res.status(201).json(newNote);
-      return;
-    } else {
-      const content: string = req.body.content;
-      const newNote = await noteService.createNote(userId, content);
-      res.status(201).json(newNote);
-      return;
-    }
+    const content: string = req.body.content;
+    const updatedAt: string = req.body.updatedAt;
+    const createdAt: string = req.body.createdAt;
+    const newNote = await noteService.createNote(userId, content, updatedAt, createdAt);
+    res.status(201).json(newNote);
+    return;
   } catch (error: any) {
     res.status(500).json({ error: error.message });
     return;
