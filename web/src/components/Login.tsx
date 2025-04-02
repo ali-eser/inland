@@ -4,8 +4,9 @@ import { useForm } from "react-hook-form"
 import { useDispatch, useSelector } from "react-redux"
 import userService from "@/services/userService"
 import { setUser } from "@/reducers/userReducer"
-import { User } from "@/types"
 import { setNotification } from "@/reducers/notificationReducer"
+import keyManager from "@/utils/keyManager"
+import { User } from "@/types"
 
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -73,10 +74,7 @@ const Login = () => {
   const handleSignUp = async (userData: z.infer<typeof SignUpSchema>) => {
     const response: object = await userService.signUp(userData);
     if ('username' in response) {
-      await (userService.login({
-        username: userData.username,
-        password: userData.password
-      }));
+      await (userService.login(userData.password, userData.username));
     }
     if ('error' in response) {
       dispatch(setNotification({
@@ -91,14 +89,12 @@ const Login = () => {
   }
 
   const handleLogin = async (data: z.infer<typeof LoginSchema>) => {
-    const response = await userService.login(data);
+    const response = await userService.login(data.password, data.username);
     if ('user' in response && 'id' in response) {
       const userToLogin: User = { user: response.user as string, id: response.id as number };
 
-      window.localStorage.setItem("loggedUser", userToLogin.user);
-      window.localStorage.setItem("loggedUserID", (userToLogin.id).toString());
-
       dispatch(setUser(userToLogin));
+      keyManager.setMasterKey(response.masterKey as CryptoKey);
 
       navigate('/');
 
