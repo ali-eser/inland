@@ -18,9 +18,15 @@ export interface Note {
   updatedAt: string
 }
 
+export interface NewNote {
+  content: string,
+  userId: number,
+  updatedAt: string,
+  createdAt: string
+}
+
 export interface Notification {
   type: "default" | "destructive" | null | undefined,
   title: string,
   description: string
 }
-
