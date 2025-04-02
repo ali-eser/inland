@@ -23,23 +23,27 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { LucideFilePlus2, LucideSave } from "lucide-react"; 
+import { LucideFilePlus2, LucideSave, Trash2 } from "lucide-react"; 
 import { ModeToggle } from "../mode-toggle";
-import { getTextFromHtml } from "@/utils/utils";
+import { parseTitle } from "@/utils/utils";
 import { Note } from "@/types";
 
 const AppSidebar = ({
   loggedUser,
   notes,
+  isLoading,
   handleLogout,
   handleSelectedNote,
-  handleCreateNote
+  handleCreateNote,
+  handleNoteDelete
 }: {
   loggedUser: string | null,
   notes: Note[],
+  isLoading: boolean,
   handleLogout: () => void,
   handleSelectedNote: (n: Note) => void,
-  handleCreateNote: () => void
+  handleCreateNote: () => void,
+  handleNoteDelete: () => void
 }) => {
   return (
     <SidebarProvider>
@@ -53,6 +57,13 @@ const AppSidebar = ({
               onClick={() => handleCreateNote()}
             ><LucideFilePlus2 className="h-[1.2rem] w-[1.2rem]"/></Button>
             <Button variant="ghost" size="sm"><LucideSave className="h-[1.2rem] w-[1.2rem]" /></Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => handleNoteDelete()}
+            >
+              <Trash2  />
+            </Button>
           </div>
         </div>
         <SidebarContent>
@@ -70,19 +81,17 @@ const AppSidebar = ({
                     >
                       <a href={"#"}>
                         <div style={{ display: "flex", flexDirection: "column" }}>
-                          {getTextFromHtml(n.content).length > 27 ? (
-                            <span>{getTextFromHtml(n.content).slice(0, 27) + "..."}</span>
-                          ): getTextFromHtml(n.content).length === 0 ? (
-                            <span>New Note</span>
-                          ) : (
-                            <span>{getTextFromHtml(n.content)}</span>
-                          )}
+                          <span>{parseTitle(n.content)}</span>
                           <span style={{ fontSize: "0.67em" }}>{n.updatedAt}</span>
                         </div>
                       </a>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
-                ))) : (
+                ))) : isLoading ? (
+                  <SidebarMenuItem>
+                    <SidebarMenuSubButton>Loading</SidebarMenuSubButton>
+                  </SidebarMenuItem>
+                ) : (
                   <SidebarMenuItem>
                     <SidebarMenuSubButton>You do not have any saved notes</SidebarMenuSubButton>
                   </SidebarMenuItem>
