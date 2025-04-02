@@ -18,7 +18,7 @@ class Note extends Model {
     type: DataType.TEXT,
     unique: false
   })
-  encryptedContent!: string;
+  content!: string;
 
   @ForeignKey(() => User)
 
