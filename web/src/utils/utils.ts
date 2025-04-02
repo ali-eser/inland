@@ -1,5 +1,5 @@
 export const formatDate = (dateString: string): string => {
-  const days: string[] = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+  // const days: string[] = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
   const months: string[] = [
     "January",
     "February",
@@ -17,13 +17,23 @@ export const formatDate = (dateString: string): string => {
   const date: Date = new Date(dateString);
   const minutes: string = String(date.getMinutes()).padStart(2, "0");
   const hours: string = String(date.getHours()).padStart(2, "0");
-  return days[date.getDay()] + ", " + months[date.getMonth()] + " " + date.getDate() + " at " + hours + ":" + minutes;
+  return date.getDate() + " " + months[date.getMonth()] + " " + date.getFullYear() + " at " + hours + ":" + minutes;
 }
 
-export const getTextFromHtml = (html: string): string => {
-  const temp = document.createElement('div');
-  temp.innerHTML = html;
-  return temp.textContent || temp.innerText || '';
+export const parseTitle = (html: string): string => {
+  const re = /<p>.*?<\/p>/;
+  const match = re.exec(html);
+  if (match) {
+    const temp = document.createElement('div');
+    temp.innerHTML = match[0];
+    if (temp.textContent && temp.textContent.length > 26) {
+      const title = temp.textContent.slice(0, 26);
+      return `${title.trimEnd()}...`
+    } else if (temp.textContent) {
+      return temp.textContent.trimEnd();
+    }
+  }
+  return "New Note";
 }
 
 export const arrayBufferToBase64 = (buffer: ArrayBuffer) => {
