@@ -17,9 +17,9 @@ const Editor = ({ note, noteState, handleNotePut }: { note: Note | Record<string
     editorProps: {
       attributes: {
         class: 'prose prose-sm sm:prose-base lg:prose-lg xl:prose-2xl focus:outline-none',
-      },
-    },
-  })
+      }
+    }
+  });
 
   useEffect(() => {
     if (editor && note) {
@@ -32,7 +32,9 @@ const Editor = ({ note, noteState, handleNotePut }: { note: Note | Record<string
       editor.on('update', ({ editor }) => {
         const now = new Date;
         const updatedNote: Note = {
-          ...note,
+          id: note.id,
+          createdAt: note.createdAt,
+          userId: note.userId,
           updatedAt: now.toISOString(),
           content: editor.getHTML()
         };
@@ -40,7 +42,6 @@ const Editor = ({ note, noteState, handleNotePut }: { note: Note | Record<string
         const updatedNoteState: Note[] = noteState.map((existingNote) =>
           existingNote.id === note.id ? updatedNote : existingNote
         );
-        console.log(noteState)
         dispatch(setNotes(updatedNoteState));
         handleNotePut(updatedNote);
       });
