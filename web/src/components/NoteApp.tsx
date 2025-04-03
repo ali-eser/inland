@@ -32,6 +32,7 @@ const NoteApp = () => {
 
   const handleSelectedNote = (n: Note): void => {
     setSelectedNote(n);
+    window.localStorage.setItem('selectedNote', n.id.toString());
     /*const alreadyActive = activeNotes.some(note => note.id === n.id);
     if (!alreadyActive) {
       setActiveNotes([...activeNotes, n]);
@@ -89,23 +90,30 @@ const NoteApp = () => {
       return;
     }
 
-    const getNotes = async () => {
+    const getNotes = async (): Promise<void> => {
       try {
         const response: Note[] = await noteService.fetchNotes(parseInt(loggedUserID as string));
-        const formattedArray: Note[] = response.sort((a, b) => {
+        let formattedArray: Note[] = response.sort((a, b) => {
           const dateA = new Date(a.updatedAt);
           const dateB = new Date(b.updatedAt);
           return dateB.getTime() - dateA.getTime();
         });
 
-        dispatch(setNotes(
-          formattedArray.map(note => ({
-            ...note,
-            createdAt: formatDate(note.createdAt),
-            updatedAt: formatDate(note.updatedAt)
-          }))
-        ));
+        formattedArray = formattedArray.map(note => ({
+          ...note,
+          createdAt: formatDate(note.createdAt),
+          updatedAt: formatDate(note.updatedAt)
+        }));
+
+        dispatch(setNotes(formattedArray));
         setIsLoading(false);
+
+        const selectedNote: string | null = window.localStorage.getItem('selectedNote');
+        if (selectedNote) {
+          const id: number = parseInt(selectedNote);
+          const lastOpened: Note[] = formattedArray.filter(n => n.id === id);
+          setSelectedNote(lastOpened[0]);
+        }
       } catch (err) {
         console.error(err);
       }
@@ -119,6 +127,7 @@ const NoteApp = () => {
           loggedUser={loggedUser}
           notes={noteState}
           isLoading={isLoading}
+          selectedNote={selectedNote}
           handleLogout={handleLogout}
           handleSelectedNote={handleSelectedNote}
           handleCreateNote={handleCreateNote}
