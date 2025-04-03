@@ -32,6 +32,7 @@ const AppSidebar = ({
   loggedUser,
   notes,
   isLoading,
+  selectedNote,
   handleLogout,
   handleSelectedNote,
   handleCreateNote,
@@ -40,6 +41,7 @@ const AppSidebar = ({
   loggedUser: string | null,
   notes: Note[],
   isLoading: boolean,
+  selectedNote: Note | Record<string, never>,
   handleLogout: () => void,
   handleSelectedNote: (n: Note) => void,
   handleCreateNote: () => void,
@@ -68,12 +70,15 @@ const AppSidebar = ({
         </div>
         <SidebarContent>
           <SidebarGroup>
-            <SidebarGroupLabel>RECENTS</SidebarGroupLabel>
+            <SidebarGroupLabel>RECENT</SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
                 {notes.length > 0 ? (notes.map(n => (
-                  <SidebarMenuItem key={n.id}>
+                  <SidebarMenuItem
+                    key={n.id}
+                  >
                     <SidebarMenuButton asChild
+                      className={selectedNote && n.id === selectedNote.id ? 'bg-gray-300 dark:bg-gray-800' : ''}
                       style={{ paddingTop: 25, paddingBottom: 25 }}
                       onClick={() => {
                         handleSelectedNote(n);
