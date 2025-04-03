@@ -22,12 +22,12 @@ export const formatDate = (dateString: string): string => {
 
 export const parseTitle = (html: string): string => {
   const re = /<p>.*?<\/p>/;
-  const match = re.exec(html);
+  const match: RegExpExecArray | null = re.exec(html);
   if (match) {
-    const temp = document.createElement('div');
+    const temp: HTMLDivElement = document.createElement('div');
     temp.innerHTML = match[0];
     if (temp.textContent && temp.textContent.length > 26) {
-      const title = temp.textContent.slice(0, 26);
+      const title: string = temp.textContent.slice(0, 26);
       return `${title.trimEnd()}...`
     } else if (temp.textContent) {
       return temp.textContent.trimEnd();
@@ -36,7 +36,7 @@ export const parseTitle = (html: string): string => {
   return "New Note";
 }
 
-export const arrayBufferToBase64 = (buffer: ArrayBuffer) => {
+export const arrayBufferToBase64 = (buffer: ArrayBuffer): string => {
   let binary: string = '';
   const bytes = new Uint8Array(buffer);
 
@@ -47,8 +47,8 @@ export const arrayBufferToBase64 = (buffer: ArrayBuffer) => {
   return window.btoa(binary);
 }
 
-export const base64toArrayBuffer = (base64: string) => {
-  const binary = window.atob(base64);
+export const base64toArrayBuffer = (base64: string): ArrayBuffer => {
+  const binary: string = window.atob(base64);
   const bytes = new Uint8Array(binary.length);
 
   for (let i = 0; i < binary.length; i++) {
