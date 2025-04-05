@@ -21,10 +21,11 @@ export const formatDate = (dateString: string): string => {
 }
 
 export const parseTitle = (html: string): string => {
-  const re = /<p>.*?<\/p>/;
+  const re = /<.*?>.*?<\/.*?>/;
   const match: RegExpExecArray | null = re.exec(html);
   if (match) {
     const temp: HTMLDivElement = document.createElement('div');
+    console.log(html)
     temp.innerHTML = match[0];
     if (temp.textContent && temp.textContent.length > 26) {
       const title: string = temp.textContent.slice(0, 26);
