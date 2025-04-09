@@ -133,7 +133,7 @@ const NoteApp = () => {
           handleCreateNote={handleCreateNote}
           handleNoteDelete={handleNoteDelete}
         />
-      <div style={{ flex: 1, display: "flex", justifyContent: "center", alignItems: "center" }} >
+      <div style={{ flex: 1, display: "flex", justifyContent: "center", flexDirection: "column", alignItems: "center" }} >
         {/*<div style={{ whiteSpace: 'nowrap' }}>
           <NoteTabs activeNotes={activeNotes} handleSelectedNote={handleSelectedNote} activeTab={activeTab} />
         </div>*/}
